@@ -2,8 +2,6 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
-
-//@ts-expect-error (TS 7016) - This import is not used in the code snippet
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
