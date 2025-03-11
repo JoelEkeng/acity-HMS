@@ -11,11 +11,13 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-
+import { motion } from "motion/react";
 
 export function Feature() {
   return (
-    <>
+    <motion.div 
+    animate={{ x: 100 }}
+    transition={{ ease: "easeOut", duration: 2 }}>
     <Typography fontFamily={"inherit"} className="text-center mt-24 mb-12 xs:text-md md:text-lg lg:text-5xl font-semibold">
     Why use ACity Hostel Management System?
     </Typography>
@@ -32,7 +34,7 @@ export function Feature() {
         />
       ))}
     </BentoGrid>
-    </>
+    </motion.div>
   );
 }
 

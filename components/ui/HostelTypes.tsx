@@ -34,7 +34,7 @@ export function HostelTypes() {
     {
       title: "Double Occupancy with Fan (Bunk Bed)",
       description:
-        "A budget-friendly and cozy shared accommodation featuring a bunk bed and a ceiling fan for ventilation. Each student gets a personal study desk, chair, and storage space, making it an ideal choice for those who enjoy a simple yet comfortable living environment. Perfect for students looking for an affordable and practical hostel option.",
+        "A budget-friendly yet comfortable option for students who enjoy shared living. This room features a sturdy bunk bed, study desks, and individual storage spaces for each occupant with Fan. Perfect for roommates who appreciate both companionship and personal space.",
       skeleton: <SkeletonFour />,
       className: "col-span-1 lg:col-span-3 border-b lg:border-none",
     },
@@ -109,40 +109,33 @@ const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
 
 export const SkeletonOne = () => {
   return (
-    <div className="relative flex py-8 px-2 gap-10 h-full">
-      <div className="w-full  p-5  mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
+    <div className="relative flex py-8 px-2 gap-10 h-1/2">
         <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
           <Image
             src="/beds/singlebed.jpg"
             alt="header"
-            width={100}
-            height={100}
-            className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+            width={800}
+            height={800}
+            className="h-full w-full aspect-square object-center rounded-sm"
           />
         </div>
-      </div>
     </div>
   );
 };
 
 export const SkeletonThree = () => {
   return (
-  <div className="relative flex py-8 px-2 gap-10 h-full">
-    <div className="w-full  p-5  mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
-      <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
-        {/* TODO */}
-        <Image
-          src="/beds/bunkbed.jpg"
-          alt="header"
-          width={100}
-          height={100}
-          className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
-        />
-      </div>
+    <div className="flex flex-col items-center relative bg-transparent dark:bg-transparent mt-10">
+    <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
+      {/* TODO */}
+      <Image
+        src="/beds/bunkbed.jpg"
+        alt="header"
+        width={800}
+        height={800}
+        className="h-full w-full aspect-square object-contain object-left-top rounded-sm"
+      />
     </div>
-
-    <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
-    <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
   </div>
   );
 };
@@ -169,7 +162,7 @@ export const SkeletonTwo = () => {
     },
   };
   return (
-    <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
+    <div className="relative flex flex-col items-start p-8 gap-10 h-1/2 overflow-hidden">
       {/* TODO */}
       <div className="flex flex-row -ml-20">
         {images.map((image, idx) => (
@@ -215,24 +208,21 @@ export const SkeletonTwo = () => {
           </motion.div>
         ))}
       </div>
-
-      <div className="absolute left-0 z-[100] inset-y-0 w-20 bg-gradient-to-r from-white dark:from-black to-transparent  h-full pointer-events-none" />
-      <div className="absolute right-0 z-[100] inset-y-0 w-20 bg-gradient-to-l from-white dark:from-black  to-transparent h-full pointer-events-none" />
     </div>
   );
 };
 
 export const SkeletonFour = () => {
   return (
-    <div className="h-60 md:h-60  flex flex-col items-center relative bg-transparent dark:bg-transparent mt-10">
+    <div className="flex flex-col items-center relative bg-transparent dark:bg-transparent mt-10">
       <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
         {/* TODO */}
         <Image
           src="/beds/bunkbed.jpg"
           alt="header"
-          width={100}
-          height={100}
-          className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+          width={800}
+          height={800}
+          className="h-full w-full aspect-square object-contain object-left-top rounded-sm"
         />
       </div>
     </div>
