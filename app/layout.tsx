@@ -10,7 +10,7 @@ const Onests = Onest({
 
 
 export const metadata: Metadata = {
-  title: "ACity HMS",
+  title: "ACity HMS+",
   description: "Seamless Hostel Booking & Secure Check-in",
 };
 
@@ -20,8 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="Onests.className">
       <body
+        font-family="Onset"
         className={`${Onests.className} antialiased`}
       >
         {children}

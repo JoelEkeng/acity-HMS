@@ -16,7 +16,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 export function Feature() {
   return (
     <>
-    <Typography className="text-center mt-24 mb-12 xs:text-md md:text-lg lg:text-5xl font-semibold">
+    <Typography fontFamily={"inherit"} className="text-center mt-24 mb-12 xs:text-md md:text-lg lg:text-5xl font-semibold">
     Why use ACity Hostel Management System?
     </Typography>
     <BentoGrid className="max-w-4xl mx-auto mb-24">
@@ -28,6 +28,7 @@ export function Feature() {
           header={item.header}
           icon={item.icon}
           className={i === 3 || i === 6 ? "md:col-span-2" : ""}
+          
         />
       ))}
     </BentoGrid>

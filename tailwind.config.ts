@@ -1,7 +1,5 @@
 import type { Config } from "tailwindcss";
 
-const { fontFamily } = require("tailwindcss/defaultTheme");
-
 export default {
     darkMode: ["class"],
     content: [
@@ -12,7 +10,7 @@ export default {
   theme: {
   	extend: {
 		fontFamily: {
-			sans: ["Onset", ...fontFamily.sans], 
+			sans: "Onset", 
 		  },
   		colors: {
   			background: 'hsl(var(--background))',
