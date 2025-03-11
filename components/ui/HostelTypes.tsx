@@ -3,10 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useRef } from "react";
 import { motion } from "motion/react";
-import { IconBrandYoutubeFilled } from "@tabler/icons-react";
-import Link from "next/link";
 
 export function HostelTypes() {
   const features = [
@@ -19,14 +16,14 @@ export function HostelTypes() {
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      title: "Double Occupancy with AC – Two Separate Beds",
+      title: "Double Occupancy with AC (Two Separate Beds)",
       description:
         "is air-conditioned room is designed for two students, offering two separate beds for added personal space. Each occupant has their own study desk, chair, and storage. Ideal for those who prefer a shared yet spacious living arrangement.",
       skeleton: <SkeletonTwo />,
       className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
     {
-      title: "Double Occupancy with AC – Bunk Bed",
+      title: "Double Occupancy with AC (Bunk Bed)",
       description:
         "A budget-friendly yet comfortable option for students who enjoy shared living. This air-conditioned room features a sturdy bunk bed, study desks, and individual storage spaces for each occupant. Perfect for roommates who appreciate both companionship and personal space.",
       skeleton: <SkeletonThree />,
@@ -34,7 +31,7 @@ export function HostelTypes() {
         "col-span-1 lg:col-span-3 lg:border-r  dark:border-neutral-800",
     },
     {
-      title: "Double Occupancy with Fan – Bunk Bed",
+      title: "Double Occupancy with Fan (Bunk Bed)",
       description:
         "A budget-friendly and cozy shared accommodation featuring a bunk bed and a ceiling fan for ventilation. Each student gets a personal study desk, chair, and storage space, making it an ideal choice for those who enjoy a simple yet comfortable living environment. Perfect for students looking for an affordable and practical hostel option.",
       skeleton: <SkeletonFour />,

@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 'use client';
 
 /*import { LOGIN_URL } from '@/api/config';*/

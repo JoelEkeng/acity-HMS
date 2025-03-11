@@ -26,7 +26,7 @@ export default function Error({
         </h1>
         
         <p className="text-muted-foreground mb-4">
-          We encountered an unexpected error. Don't worry, you can try again.
+          We encountered an unexpected error. Don&apos;t worry, you can try again.
         </p>
         
         {process.env.NODE_ENV === 'development' && (
