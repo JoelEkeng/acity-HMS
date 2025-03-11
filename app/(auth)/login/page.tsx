@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <div className="flex flex-col p-4 lg:w-1/3 m-auto mt-48">
       <div className="text-center">
-        <Image src="/logo.png" width={200} height={200} className="m-auto" />
+        <Image src="/logo.png" width={200} height={200} className="m-auto" alt="Acity Logo" />
         <p className="text-gray-500">
           Welcome back! Please login to your account.
         </p>
