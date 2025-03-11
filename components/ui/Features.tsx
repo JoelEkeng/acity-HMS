@@ -7,11 +7,7 @@ import React from "react";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 import { Typography } from "@mui/joy";
 import {
-  Lock,
-  House,
-  Wifi,
-  History,
-  UsersRound
+  Lock, House, Wifi, History, UsersRound
 } from "lucide-react";
 import Image from "next/image";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
