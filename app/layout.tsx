@@ -10,7 +10,7 @@ const Onests = Onest({
 
 
 export const metadata: Metadata = {
-  title: "ACity HMS+",
+  title: "ACityHost",
   description: "Seamless Hostel Booking & Secure Check-in",
 };
 

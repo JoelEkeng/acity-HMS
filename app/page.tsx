@@ -15,8 +15,8 @@ export default function Home() {
        <Header />
       <main className="p-24 flex flex-col gap-8 row-start-2 justify-center items-center sm:items-start">
       <div className="mx-auto sm:text-left mt-24">
-        <Typography fontFamily={"inherit"} color="danger" className="text-2xl font-semibold tracking-tighter md:text-3xl lg:text-5xl text-center mb-4">
-          Welcome to <br/> ACity Hostel Management System
+        <Typography fontFamily={"inherit"} color="danger" className="text-2xl font-semibold tracking-tighter md:text-3xl lg:text-5xl text-center">
+          Welcome to ACityHost
         </Typography>
         <TypewriterEffect />
       </div>

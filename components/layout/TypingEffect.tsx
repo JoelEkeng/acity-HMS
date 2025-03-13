@@ -3,19 +3,19 @@ import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 export function TypewriterEffect() {
   const words = [
     {
-      text: "A hostel",
+      text: "Smart ",
     },
     {
-      text: "management",
+      text: "Living",
     },
     {
-      text: "system that helps",
+      text: ",",
     },
     {
-      text: "you manage your",
+      text: "Seamless ",
     },
     {
-      text: " booking with ease.",
+      text: "Stay.",
     },
   ];
   return (

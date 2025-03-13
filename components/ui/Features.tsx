@@ -16,7 +16,7 @@ import { motion } from "motion/react";
 export function Feature() {
   return (
     <motion.div 
-    animate={{ x: 100 }}
+    animate={{ x: 0, y: 0, opacity: 1, scale: 1 }}
     initial={{ x: -100 }}
     exit={{ x: -100 }}
     transition={{ ease: "easeOut", duration: 5 }}
