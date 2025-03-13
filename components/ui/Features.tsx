@@ -17,7 +17,10 @@ export function Feature() {
   return (
     <motion.div 
     animate={{ x: 100 }}
-    transition={{ ease: "easeOut", duration: 5 }}>
+    transition={{ ease: "easeOut", duration: 5 }}
+    whileInView={{opacity: 1, scale: 1.1}}
+    viewport={{ once: true, amount: 0.5 }}>
+    
     <Typography fontFamily={"inherit"} className="text-center mt-24 mb-12 xs:text-md md:text-lg lg:text-5xl font-semibold">
     Why use ACity Hostel Management System?
     </Typography>
