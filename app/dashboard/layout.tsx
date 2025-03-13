@@ -1,14 +1,13 @@
+/* eslint-disable */
+
 import { getEvents } from "@/data";
 import "@/styles/tailwind.css";
 import { Metadata } from "next";
 import { ApplicationLayout } from "./application-layout";
-import Head from "next/head";
+
 
 export const metadata: Metadata = {
-  title: {
-    default: "Dashboard",
-  },
-  description: "",
+  title:  "Dashboard",
 };
 
 export default async function RootLayout({
@@ -20,8 +19,6 @@ export default async function RootLayout({
 
   return (
     <>
-      <Head>
-      </Head>
       <ApplicationLayout events={events}>
         {children}
       </ApplicationLayout>

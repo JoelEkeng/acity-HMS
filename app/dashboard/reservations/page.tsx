@@ -1,9 +1,9 @@
 import { getReservations } from '@/api/reservations';
-import { Heading } from '@/components/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { Metadata } from 'next';
-import { Link } from '@/components/link';
-import { Button } from '@/components/button';
-import SimpleTable from '@/app/(components)/SimpleTable';
+import { Link } from '@/components/dashboard/link';
+import { Button } from '@/components/dashboard/button';
+import SimpleTable from '@/components/dashboard/SimpleTable';
 
 
 export const metadata: Metadata = {

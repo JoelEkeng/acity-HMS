@@ -1,10 +1,10 @@
 import { getAdmissionCycles } from '@/api/admission-cycles';
-import { Heading } from '@/components/heading';
+import { Heading } from '@/components/dashboard/heading';
 import { Metadata } from 'next';
-import { Link } from '@/components/link';
-import { Button } from '@/components/button';
+import { Link } from '@/components/dashboard/link';
+import { Button } from '@/components/dashboard/button';
 // import PropertiesList from '@/app/dashboard/properties/PropertiesList'
-import SimpleTable from '@/app/(components)/SimpleTable';
+import SimpleTable from '@/components/dashboard/SimpleTable';
 
 
 export const metadata: Metadata = {

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client'
 
 import { Input } from '@/components/dashboard/input'

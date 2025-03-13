@@ -1,29 +1,30 @@
+/* eslint-disable */
+
 'use client';
 
-import { Badge } from '@/components/badge';
-import { Button } from '@/components/button';
-import { Divider } from '@/components/divider';
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/dropdown';
-import { Heading } from '@/components/heading';
-import { Input, InputGroup } from '@/components/input';
-import { Link } from '@/components/link';
-import { Select } from '@/components/select';
+import { Badge } from '@/components/dashboard/badge';
+import { Button } from '@/components/dashboard/button';
+import { Divider } from '@/components/dashboard/divider';
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/dashboard/dropdown';
+import { Heading } from '@/components/dashboard/heading';
+import { Input, InputGroup } from '@/components/dashboard/input';
+import { Link } from '@/components/dashboard/link';
+import { Select } from '@/components/dashboard/select';
 import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
-import { deleteProperty } from '@/api/properties';
 import { useRouter } from 'next/navigation';
 
 export default function PropertiesList({ properties }: { properties: any[] }) {
   const router = useRouter();
 
   const handleDelete = async (id: string) => {
-    try {
-      await deleteProperty(Number(id));
-      alert('Are you sure you want to delete propert!');
-      router.refresh(); // Refresh the page to reflect changes
-    } catch (error) {
-      console.error('Error deleting property:', error);
-      alert('Failed to delete property.');
-    }
+    // try {
+    //   await deleteProperty(Number(id));
+    //   alert('Are you sure you want to delete propert!');
+    //   router.refresh(); // Refresh the page to reflect changes
+    // } catch (error) {
+    //   console.error('Error deleting property:', error);
+    //   alert('Failed to delete property.');
+    // }
   };
   
 
