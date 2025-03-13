@@ -17,6 +17,8 @@ export function Feature() {
   return (
     <motion.div 
     animate={{ x: 100 }}
+    initial={{ x: -100 }}
+    exit={{ x: -100 }}
     transition={{ ease: "easeOut", duration: 5 }}
     whileInView={{opacity: 1, scale: 1.1}}
     viewport={{ once: true, amount: 0.5 }}>
