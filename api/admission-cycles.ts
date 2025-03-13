@@ -1,25 +1,7 @@
 // Api endpoints for admission cycles
-import { API_URL } from './config';
-import { getUserContent } from '@/app/(utilities)/djangoApi';
 
-const axios = require('axios').default;
+import axios from 'axios';
 
-type AdmissionCycle = {
-  id: number;
-  client_property_name: string;
-  uuid: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  start_date: string;
-  end_date: string;
-  tenancy_start_date: string;
-  tenancy_end_date: string;
-  payment_info: string;
-  description: string;
-  client_property: number;
-  exception_units: any[];
-};
 
 
 // // Create an admission cycle
@@ -35,7 +17,7 @@ type AdmissionCycle = {
 // get all admission cycles
 export const getAdmissionCycles = async () => {
   try {
-    const response = await getUserContent(`/property/tenant-admission-cycles`, '');
+    const response = await axios(`/property/tenant-admission-cycles`);
     console.log("DEBUG::get-admission-cycles", response)
     return response;
   } catch (error) {
