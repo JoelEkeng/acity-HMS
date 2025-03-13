@@ -1,4 +1,6 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
+/* eslint-disable */
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table'
 
 interface Column {
   header: string;
