@@ -3,7 +3,7 @@ import PropertiesList from '@/app/dashboard/properties/PropertiesList'
 import axios from 'axios';
 
 export const metadata: Metadata = {
-  title: 'Properties',
+  title: 'ACityHost Properties',
 };
 
 export default async function Properties() {

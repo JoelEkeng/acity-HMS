@@ -4,35 +4,18 @@
 
 import { Badge } from '@/components/dashboard/badge';
 import { Divider } from '@/components/dashboard/divider';
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/dashboard/dropdown';
 import { Heading } from '@/components/dashboard/heading';
 import { Input, InputGroup } from '@/components/dashboard/input';
 import { Link } from '@/components/dashboard/link';
 import { Select } from '@/components/dashboard/select';
-import { EllipsisVerticalIcon } from '@heroicons/react/16/solid';
-import { useRouter } from 'next/navigation';
 
 export default function PropertiesList({ properties }: { properties: any[] }) {
-  const router = useRouter();
-
-  const handleDelete = async (id: string) => {
-    // try {
-    //   await deleteProperty(Number(id));
-    //   alert('Are you sure you want to delete propert!');
-    //   router.refresh(); // Refresh the page to reflect changes
-    // } catch (error) {
-    //   console.error('Error deleting property:', error);
-    //   alert('Failed to delete property.');
-    // }
-  };
-  
-
-  return (
+    return (
     <>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="max-sm:w-full sm:flex-1">
-          <Heading>Properties</Heading>
-          <div className="mt-4 flex max-w-xl gap-4">
+          <Heading>Rooms</Heading>
+          <div className="mt-4 flex max-w-xl gap-4 justify-between">
             <div className="flex-1">
               <InputGroup>
                 <Input name="search" placeholder="Search" />
@@ -58,7 +41,7 @@ export default function PropertiesList({ properties }: { properties: any[] }) {
                   <Link href="" aria-hidden="true">
                     <img
                       className="aspect-[3/2] rounded-lg shadow"
-                      src="/properties/default.jpg"
+                      src="/hostels/1.jpg"
                       alt={`${property.name}`}
                     />
                   </Link>
@@ -86,17 +69,6 @@ export default function PropertiesList({ properties }: { properties: any[] }) {
                 <Badge className="max-sm:hidden font-bold" color={property.status === 'A' ? 'lime' : 'zinc'}>
                   {property.status}
                 </Badge>
-                
-                <Dropdown>
-                  <DropdownButton plain aria-label="More options">
-                    <EllipsisVerticalIcon />
-                  </DropdownButton>
-                  <DropdownMenu anchor="bottom end" className="gap-y-1">
-                    <DropdownItem>View</DropdownItem>
-                    <DropdownItem><Link href={`/dashboard/properties/edit/${property.id}`}>Edit</Link></DropdownItem>
-                    <DropdownItem onClick={() => handleDelete(property.id)}>Delete</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
               </div>
             </div>
           </li>

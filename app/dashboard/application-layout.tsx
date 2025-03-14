@@ -106,7 +106,7 @@ export function ApplicationLayout({
           <SidebarHeader>
             <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
           </SidebarHeader>
-          <SidebarHeading className="font-bold text-center md:text-2xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
+          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
 
           <Divider soft />
           
@@ -121,7 +121,7 @@ export function ApplicationLayout({
                 current={pathname.startsWith("/dashboard/properties")}
               >
                 <Square2StackIcon />
-                <SidebarLabel>Properties</SidebarLabel>
+                <SidebarLabel>Rooms</SidebarLabel>
               </SidebarItem>
 
               <SidebarItem
