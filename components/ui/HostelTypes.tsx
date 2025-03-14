@@ -49,7 +49,7 @@ export function HostelTypes() {
       initial={{ opacity: 0 }}
       animate={{ y: 10, opacity: 1, scale: 0.5 }}
       exit={{ opacity: 0, y: -10 }}
-      transition= {{ ease: "backInOut", duration: 5}}
+      transition= {{ ease: "BackIn", duration: 5}}
       whileInView={{opacity: 1, scale: 1.1}}
       viewport={{ once: true, amount: 0.5 }}
      className="relative z-20 py-10 lg:py-40 max-w-7xl mx-auto">
