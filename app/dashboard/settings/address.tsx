@@ -20,7 +20,7 @@ export function Address() {
         defaultValue="Property #279-302, Agbogba - Ashongman Rd, Haatso"
         className="col-span-2"
       />
-      <Input aria-label="City" name="city" placeholder="City" defaultValue="Toronto" className="col-span-2" />
+      <Input aria-label="City" name="city" placeholder="City" defaultValue="Greater Accra" className="col-span-2" />
       <Listbox aria-label="Region" name="region" placeholder="Region" defaultValue="Greater Accra">
         {country.regions.map((region) => (
           <ListboxOption key={region} value={region}>
