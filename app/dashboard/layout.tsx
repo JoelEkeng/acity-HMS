@@ -7,7 +7,7 @@ import { ApplicationLayout } from "./application-layout";
 
 
 export const metadata: Metadata = {
-  title:  "Dashboard",
+  title:  "ACityHost",
 };
 
 export default async function RootLayout({

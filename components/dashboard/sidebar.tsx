@@ -97,7 +97,7 @@ export const SidebarItem = forwardRef(function SidebarItem(
     // Hover
     'data-[hover]:bg-zinc-950/5 data-[slot=icon]:*:data-[hover]:fill-zinc-950',
     // Active
-    'data-[active]:bg-red-800 data-[slot=icon]:*:data-[active]:fill-red-600',
+    'data-[active]:bg-zince-950 data-[slot=icon]:*:data-[active]:fill-zinc-950',
     // Current
     'data-[slot=icon]:*:data-[current]:fill-zinc-950',
     // Dark mode

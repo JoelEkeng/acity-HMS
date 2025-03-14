@@ -3,7 +3,6 @@
 'use client';
 
 import { Badge } from '@/components/dashboard/badge';
-import { Button } from '@/components/dashboard/button';
 import { Divider } from '@/components/dashboard/divider';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/dashboard/dropdown';
 import { Heading } from '@/components/dashboard/heading';
@@ -48,9 +47,6 @@ export default function PropertiesList({ properties }: { properties: any[] }) {
             </div>
           </div>
         </div>
-        <Link href={'/dashboard/properties/form'}>
-          <Button>Add Properties</Button>
-        </Link>
       </div>
       <ul className="mt-10">
         {properties.map((property, index) => (

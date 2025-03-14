@@ -61,14 +61,7 @@ function AccountDropdownMenu({
         <DropdownLabel>My account</DropdownLabel>
       </DropdownItem>
       <DropdownDivider />
-      <DropdownItem href="#">
-        <ShieldCheckIcon />
-        <DropdownLabel>Privacy policy</DropdownLabel>
-      </DropdownItem>
-      <DropdownItem href="#">
-        <LightBulbIcon />
-        <DropdownLabel>Share feedback</DropdownLabel>
-      </DropdownItem>
+      
       <DropdownDivider />
       <DropdownItem onClick={()=>signOut({callbackUrl: '/login'})}>
         <ArrowRightStartOnRectangleIcon />
@@ -113,7 +106,7 @@ export function ApplicationLayout({
           <SidebarHeader>
             <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
           </SidebarHeader>
-          <SidebarHeading className="font-bold text-center md:text-2xl -mt-10 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
+          <SidebarHeading className="font-bold text-center md:text-2xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
 
           <Divider soft />
           
@@ -130,26 +123,13 @@ export function ApplicationLayout({
                 <Square2StackIcon />
                 <SidebarLabel>Properties</SidebarLabel>
               </SidebarItem>
-              <SidebarItem
-                href="/dashboard/tenants"
-                current={pathname.startsWith("/dashboard/tenants")}
-              >
-                <UserCircleIcon />
-                <SidebarLabel>Tenants</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem
-                href="/dashboard/admission-cycles"
-                current={pathname.startsWith("/dashboard/admission-cycles")}
-              >
-                <ArrowPathRoundedSquareIcon />
-                <SidebarLabel>Admission Cycles</SidebarLabel>
-              </SidebarItem>
+
               <SidebarItem
                 href="/dashboard/reservations"
                 current={pathname.startsWith("/dashboard/reservations")}
               >
                 <TicketIcon />
-                <SidebarLabel>Reservations</SidebarLabel>
+                <SidebarLabel>Book Hostel</SidebarLabel>
               </SidebarItem>
               <SidebarItem
                 href="/dashboard/settings"
@@ -174,7 +154,7 @@ export function ApplicationLayout({
                   />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      Joel
+                      Joel Ekeng
                     </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
                       joel.ekenga@acity.edu.gh
