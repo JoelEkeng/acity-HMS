@@ -17,11 +17,11 @@ export function Address() {
         aria-label="Street Address"
         name="address"
         placeholder="Street Address"
-        defaultValue="147 Catalyst Ave"
+        defaultValue="Property #279-302, Agbogba - Ashongman Rd, Haatso"
         className="col-span-2"
       />
       <Input aria-label="City" name="city" placeholder="City" defaultValue="Toronto" className="col-span-2" />
-      <Listbox aria-label="Region" name="region" placeholder="Region" defaultValue="Ontario">
+      <Listbox aria-label="Region" name="region" placeholder="Region" defaultValue="Greater Accra">
         {country.regions.map((region) => (
           <ListboxOption key={region} value={region}>
             <ListboxLabel>{region}</ListboxLabel>
@@ -40,7 +40,7 @@ export function Address() {
       >
         {countries.map((country) => (
           <ListboxOption key={country.code} value={country}>
-            <img className="w-5 sm:w-4" src={country.flagUrl} alt="" />
+            <img className="w-5 sm:w-4" src="/flags/gh.svg" alt="" />
             <ListboxLabel>{country.name}</ListboxLabel>
           </ListboxOption>
         ))}
