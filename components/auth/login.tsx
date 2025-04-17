@@ -63,7 +63,7 @@ export function LoginForm() {
   };
 
   return (
-    <form>
+    <form className='max-w-md items-center mx-auto pt-10'>
       <div className="flex flex-col gap-4 my-auto">
         <div>
           <Label htmlFor="email">Email: </Label>

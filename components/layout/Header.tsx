@@ -10,10 +10,6 @@ const links = [
         href: '/'
     },
     {
-        name: 'Our Hostels',
-        href: '/hostels'
-    },
-    {
         name: 'Contact Us',
         href: '/contact'
     }
