@@ -21,13 +21,9 @@ const SignUpForm = () => {
           />
           <div className="relative z-10 p-12  max-w-lg">
             <Image src="/logo.png" width={200} height={200} className="m-auto" alt="Acity Logo" />
-            <h1 className="text-xl font-bold mb-6 -mt-8 dark:text-white text-white text-center">
+            <h1 className="text-xl font-bold mb-6 -mt-2 dark:text-white text-white text-center">
               Acity Hostel Management System
             </h1>
-            <p className="text-lg dark:text-red-600 text-red-600">
-              Join thousands of users who trust our platform for their daily
-              needs. Experience the difference today.
-            </p>
           </div>
         </div>
 

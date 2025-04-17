@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col p-4 lg:w-1/3 m-auto">
-      <div className="text-center py-4">
+      <div className="text-center mt-24">
         <p className="text-gray-500">
           Welcome back! Please login to your account.
         </p>
