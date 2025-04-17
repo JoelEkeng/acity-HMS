@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Onest } from 'next/font/google'
 import "./globals.css";
 
-const Onests = Onest({
+const onest = Onest({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',
@@ -20,10 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="Onests.className">
+    <html lang="en" className={onest.className}>
       <body
-        font-family="Onset"
-        className={`${Onests.className} antialiased`}
+        font-family="onset"
+        className={`${onest.className} antialiased`}
       >
         {children}
       </body>
