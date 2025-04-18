@@ -106,28 +106,28 @@ export function ApplicationLayout({
           <SidebarHeader>
             <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
           </SidebarHeader>
-          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
+          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">Admin Dashboard</SidebarHeading>
 
           <Divider soft />
           
           <SidebarBody className="mt-12">
             <SidebarSection className="gap-10">
-              <SidebarItem href="/dashboard" current={pathname === "/"}>
+              <SidebarItem href="admin/dashboard" current={pathname === "/"}>
                 <HomeIcon />
                 <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
               </SidebarItem>
 
               <SidebarItem
                 href="/dashboard/booking"
-                current={pathname.startsWith("/dashboard/booking")}
+                current={pathname.startsWith("admin/dashboard/booking")}
               >
                 <TicketIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Book Housing</SidebarLabel>
+                <SidebarLabel className="font-medium text-lg md:text-xl">Book History</SidebarLabel>
               </SidebarItem>
               
               <SidebarItem
                 href="/dashboard/maintenance"
-                current={pathname.startsWith("/dashboard/maintenance")}
+                current={pathname.startsWith("admin/dashboard/maintenance")}
               >
                 <Square2StackIcon />
                 <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance</SidebarLabel>
