@@ -13,7 +13,7 @@ export function MaintenanceHistory() {
   useEffect(() => {
     const fetchTickets = async () => {
       try {
-        const response = await axios.get<MaintenanceTicket[]>('http://localhost:5000/api/tickets')
+        const response = await axios.get<MaintenanceTicket[]>('https://acityhost-backend.onrender.com/api/tickets')
         setTickets(response.data)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {

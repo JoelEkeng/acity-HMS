@@ -20,7 +20,7 @@ export default function CoordinatorMaintenanceTracking() {
 
   const fetchTickets = async () => {
     try {
-      const res = await axios.get<MaintenanceTicket[]>('http://localhost:5000/api/tickets')
+      const res = await axios.get<MaintenanceTicket[]>('https://acityhost-backend.onrender.com/api/tickets')
       setTickets(res.data)
     } catch (err) {
       setError('Failed to load tickets')

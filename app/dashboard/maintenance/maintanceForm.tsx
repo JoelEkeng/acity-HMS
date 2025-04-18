@@ -58,7 +58,7 @@ export function MaintenanceForm() {
         formData.append("image", file)
       }
 
-      await axios.post("http://localhost:5000/api/tickets", formData)
+      await axios.post("https://acityhost-backend.onrender.com/api/tickets", formData)
 
       setSuccessMsg("Complaint submitted successfully.")
       form.reset()
