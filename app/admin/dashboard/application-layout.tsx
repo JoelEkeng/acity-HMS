@@ -118,19 +118,19 @@ export function ApplicationLayout({
               </SidebarItem>
 
               <SidebarItem
-                href="/dashboard/booking"
+                href="admin/dashboard/booking"
                 current={pathname.startsWith("admin/dashboard/booking")}
               >
                 <TicketIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Book History</SidebarLabel>
+                <SidebarLabel className="font-medium text-lg md:text-xl">Current Occupants</SidebarLabel>
               </SidebarItem>
               
               <SidebarItem
-                href="/dashboard/maintenance"
+                href="admin/dashboard/maintenance"
                 current={pathname.startsWith("admin/dashboard/maintenance")}
               >
                 <Square2StackIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance</SidebarLabel>
+                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance Log</SidebarLabel>
               </SidebarItem>
 
             </SidebarSection>
