@@ -1,12 +1,39 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import { Badge } from '@/components/dashboard/badge'
 import { MaintenanceTicket } from '@/interfaces'
 
-export function MaintenanceHistory({ tickets }: { tickets: MaintenanceTicket[] }) {
-    return (
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-4">Maintenance History</h2>
+export function MaintenanceHistory() {
+  const [tickets, setTickets] = useState<MaintenanceTicket[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const response = await axios.get<MaintenanceTicket[]>('http://localhost:5000/api/tickets')
+        setTickets(response.data)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        setError(err?.response?.data?.message || 'Failed to fetch maintenance tickets.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchTickets()
+  }, [])
+
+  return (
+    <div className="mt-10">
+      <h2 className="text-xl font-semibold mb-4">Maintenance History</h2>
+
+      {loading && <p className="text-gray-500">Loading tickets...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
+
+      {!loading && !error && (
         <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
           <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
             <thead className="bg-gray-50 text-xs uppercase tracking-wider text-gray-600">
@@ -56,7 +83,7 @@ export function MaintenanceHistory({ tickets }: { tickets: MaintenanceTicket[] }
             </tbody>
           </table>
         </div>
-      </div>
-    )
-  }
-  
+      )}
+    </div>
+  )
+}
