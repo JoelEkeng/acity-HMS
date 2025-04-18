@@ -111,33 +111,28 @@ export function ApplicationLayout({
           <Divider soft />
           
           <SidebarBody className="mt-12">
-            <SidebarSection>
+            <SidebarSection className="gap-10">
               <SidebarItem href="/dashboard" current={pathname === "/"}>
                 <HomeIcon />
-                <SidebarLabel>Home</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem
-                href="/dashboard/properties"
-                current={pathname.startsWith("/dashboard/properties")}
-              >
-                <Square2StackIcon />
-                <SidebarLabel>Rooms</SidebarLabel>
+                <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
               </SidebarItem>
 
               <SidebarItem
-                href="/dashboard/reservations"
-                current={pathname.startsWith("/dashboard/reservations")}
+                href="/dashboard/booking"
+                current={pathname.startsWith("/dashboard/booking")}
               >
                 <TicketIcon />
-                <SidebarLabel>Book Hostel</SidebarLabel>
+                <SidebarLabel className="font-medium text-lg md:text-xl">Book Housing</SidebarLabel>
               </SidebarItem>
+              
               <SidebarItem
-                href="/dashboard/settings"
-                current={pathname.startsWith("/dashboard/settings")}
+                href="/dashboard/maintenance"
+                current={pathname.startsWith("/dashboard/maintenance")}
               >
-                <Cog6ToothIcon />
-                <SidebarLabel>Settings</SidebarLabel>
+                <Square2StackIcon />
+                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance</SidebarLabel>
               </SidebarItem>
+
             </SidebarSection>
 
           </SidebarBody>

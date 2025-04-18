@@ -26,3 +26,22 @@ export interface hostelCardProps {
   gender: "male" | "female" | "mixed";
   onBook?: (id: number) => void;
 }
+
+
+export type TicketStatus = 'Open' | 'In Progress' | 'Resolved' | 'Escalated';
+export type TicketPriority = 'Low' | 'Medium' | 'High';
+
+export interface MaintenanceTicket {
+  id: string;
+  studentId: string;
+  roomNumber: string;
+  title: string;
+  description: string;
+  category: string;
+  priority: TicketPriority;
+  status: TicketStatus;
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+  assignedTo?: string;
+}

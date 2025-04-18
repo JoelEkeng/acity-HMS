@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import PropertiesList from '@/app/dashboard/properties/PropertiesList'
+import PropertiesList from '@/app/dashboard/maintenance/PropertiesList'
 import axios from 'axios';
 
 export const metadata: Metadata = {
@@ -11,11 +11,10 @@ export default async function Properties() {
 
   try {
     const res = await axios('https://67d3561f8bca322cc269da1a.mockapi.io/acityhost/Properties');
-    // console.log("DEBUG::Properties*******", res);
     properties = res?.data;
   } catch (error) {
     console.log("DEBUG::Properties", error);
-    properties = []; // Fallback to an empty array
+    properties = [];
   }
 
   if (!properties?.length) {

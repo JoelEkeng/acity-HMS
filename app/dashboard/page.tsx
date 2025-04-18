@@ -19,10 +19,6 @@ import { getRecentOrders } from "@/data";
 import { noSSR } from "next/dynamic";
 import { CiEdit, CiTrash} from "react-icons/ci";
 import { Stat } from "@/components/dashboard/stat";
-// import { FaPlus } from "react-icons/fa6";
-// import ColumnChart from '@/components/Charts'
-// import BarCharts from "@/components/BarChart";
-// import Papaparse from "@/components/papaparse";
 
 
 export default async function Home() {
@@ -41,12 +37,7 @@ export default async function Home() {
           </Select>
         </div>
       </div>
-      {/* <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat title="Total revenue" value="$2.6M" change="+4.5%" />
-        <Stat title="Average order value" value="$455" change="-0.5%" />
-        <Stat title="Tickets sold" value="5,888" change="+4.5%" />
-        <Stat title="Pageviews" value="823,067" change="+21.2%" />
-      </div> */}
+   
      <Divider soft className="mt-6" />
       <div className="mt-4">
         <p>No current booking</p>
@@ -54,7 +45,6 @@ export default async function Home() {
 
       <div className="mt-14 flex justify-between">
         <Subheading>Booking History</Subheading>
-        {/* <Papaparse /> */}
       </div>
       
       <Table className="mt-4 [--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
