@@ -27,22 +27,10 @@ export default async function Home() {
   return (
     <>
       <div className="mt-8 flex items-end justify-between">
-        <Subheading>Current Accomodation</Subheading>
-        <div>
-          <Select name="period">
-            <option value="last_week">Last week</option>
-            <option value="last_two">Last two weeks</option>
-            <option value="last_month">Last month</option>
-            <option value="last_quarter">Last quarter</option>
-          </Select>
-        </div>
+        <Subheading>Hostel Statstics</Subheading>
       </div>
    
      <Divider soft className="mt-6" />
-      <div className="mt-4">
-        <p>No current booking</p>
-      </div>
-
       <div className="mt-14 flex justify-between">
         <Subheading>Booking History</Subheading>
       </div>

@@ -3,168 +3,140 @@
 
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  HomeIcon,
+  TicketIcon,
+  Square2StackIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
 import { Avatar } from "@/components/dashboard/avatar";
 import {
   Dropdown,
   DropdownButton,
-  DropdownDivider,
   DropdownItem,
+  DropdownDivider,
   DropdownLabel,
   DropdownMenu,
 } from "@/components/dashboard/dropdown";
-import {
-  Navbar,
-  NavbarItem,
-  NavbarSection,
-  NavbarSpacer,
-} from "@/components/dashboard/navbar";
-import {
-  Sidebar,
-  SidebarBody,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarHeading,
-  SidebarItem,
-  SidebarLabel,
-  SidebarSection,
-} from "@/components/dashboard/sidebar";
-import { SidebarLayout } from "@/components/dashboard/sidebar-layout";
-import { getEvents } from "@/data";
-import {
-  ArrowRightStartOnRectangleIcon,
-  ChevronUpIcon,
-  LightBulbIcon,
-  ShieldCheckIcon,
-  UserCircleIcon,
-} from "@heroicons/react/16/solid";
-import {
-  Cog6ToothIcon,
-  HomeIcon,
-  Square2StackIcon,
-  TicketIcon,
-  ArrowPathRoundedSquareIcon,
-} from "@heroicons/react/20/solid";
-import { Divider } from '@/components/dashboard/divider'
-import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react"
-import Image from 'next/image';
+import { NavbarItem } from "@/components/dashboard/navbar";
+import { signOut } from "next-auth/react";
 
-function AccountDropdownMenu({
-  anchor,
-}: {
-  anchor: "top start" | "bottom end";
-}) {
+function AccountDropdownMenu({ anchor }: { anchor: "top start" | "bottom end" }) {
   return (
     <DropdownMenu className="min-w-64" anchor={anchor}>
       <DropdownItem href="#">
-        <UserCircleIcon />
         <DropdownLabel>My account</DropdownLabel>
       </DropdownItem>
       <DropdownDivider />
-      
-      <DropdownDivider />
-      <DropdownItem onClick={()=>signOut({callbackUrl: '/login'})}>
-        <ArrowRightStartOnRectangleIcon />
+      <DropdownItem onClick={() => signOut({ callbackUrl: "/login" })}>
         <DropdownLabel>Sign out</DropdownLabel>
       </DropdownItem>
     </DropdownMenu>
   );
 }
 
-
 export function ApplicationLayout({
   events,
   children,
 }: {
-  events: Awaited<ReturnType<typeof getEvents>>;
+  events: any;
   children: React.ReactNode;
 }) {
-  let pathname = usePathname();
-  /*const session = useSession();
-  if (!session) {
-    console.log("DEBUG::session", session);
-    signOut({callbackUrl: '/login'});
-  }; */
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: "/admin/dashboard", icon: HomeIcon, label: "Home" },
+    { href: "/admin/dashboard/booking", icon: TicketIcon, label: "Current Occupants" },
+    { href: "/admin/dashboard/maintenance", icon: Square2StackIcon, label: "Maintenance Log" },
+  ];
+
+  const isActive = (href: string) => pathname.startsWith(href);
 
   return (
-    <SidebarLayout
-      navbar={
-        <Navbar>
-          <NavbarSpacer />
-          <NavbarSection>
+    <div className="min-h-screen bg-gray-50">
+      {/* Top Navbar */}
+      <nav className="sticky top-0 z-50 bg-white shadow-sm px-6 py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" alt="Logo" width={40} height={40} />
+            <span className="text-xl font-semibold text-gray-800">Admin Dashboard</span>
+          </div>
+
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex gap-6 relative">
+            {navLinks.map(({ href, icon: Icon, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-1 text-sm font-medium px-2 py-1 transition-all relative ${
+                  isActive(href) ? "text-red-600" : "text-gray-600 hover:text-black"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                {label}
+                {isActive(href) && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 rounded transition-all" />
+                )}
+              </Link>
+            ))}
+          </div>
+
+          {/* Avatar */}
+          <div className="hidden md:block">
             <Dropdown>
               <DropdownButton as={NavbarItem}>
                 <Avatar src="/user/avatar.png" square />
               </DropdownButton>
               <AccountDropdownMenu anchor="bottom end" />
             </Dropdown>
-          </NavbarSection>
-        </Navbar>
-      }
-      sidebar={
-        <Sidebar className="max-lg:hidden shadow-2xl">
-          <SidebarHeader>
-            <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
-          </SidebarHeader>
-          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">Admin Dashboard</SidebarHeading>
+          </div>
 
-          <Divider soft />
-          
-          <SidebarBody className="mt-12">
-            <SidebarSection className="gap-10">
-              <SidebarItem href="/admin/dashboard" current={pathname === "/"}>
-                <HomeIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
-              </SidebarItem>
+          {/* Mobile Menu Button */}
+          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+          </button>
+        </div>
 
-              <SidebarItem
-                href="/admin/dashboard/booking"
-                current={pathname.startsWith("/admin/dashboard/booking")}
+        {/* Mobile Dropdown Nav */}
+        {menuOpen && (
+          <div className="md:hidden mt-4 space-y-2">
+            {navLinks.map(({ href, icon: Icon, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium ${
+                  isActive(href)
+                    ? "bg-red-100 text-red-700"
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
               >
-                <TicketIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Current Occupants</SidebarLabel>
-              </SidebarItem>
-              
-              <SidebarItem
-                href="/admin/dashboard/maintenance"
-                current={pathname.startsWith("/admin/dashboard/maintenance")}
-              >
-                <Square2StackIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance Log</SidebarLabel>
-              </SidebarItem>
+                <Icon className="w-5 h-5" />
+                {label}
+              </Link>
+            ))}
 
-            </SidebarSection>
+            {/* Avatar Dropdown on mobile */}
+            <div className="mt-2 px-4">
+              <Dropdown>
+                <DropdownButton as={NavbarItem}>
+                  <Avatar src="/user/avatar.png" square />
+                </DropdownButton>
+                <AccountDropdownMenu anchor="bottom end" />
+              </Dropdown>
+            </div>
+          </div>
+        )}
+      </nav>
 
-          </SidebarBody>
-
-          <SidebarFooter className="max-lg:hidden">
-            <Dropdown>
-              <DropdownButton as={SidebarItem}>
-                <span className="flex min-w-0 items-center gap-3">
-                  <Avatar
-                    src="/user/avatar.png"
-                    className="size-10"
-                    square
-                    alt=""
-                  />
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      Joel Ekeng
-                    </span>
-                    <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      joel.ekenga@acity.edu.gh
-                    </span>
-                  </span>
-                </span>
-                <ChevronUpIcon />
-              </DropdownButton>
-              <AccountDropdownMenu anchor="top start" />
-            </Dropdown>
-          </SidebarFooter>
-        </Sidebar>
-      }
-    >
-      {children}
-    </SidebarLayout>
+      {/* Page Content */}
+      <main className="p-6">{children}</main>
+    </div>
   );
 }
