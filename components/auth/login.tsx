@@ -1,10 +1,9 @@
 /* eslint-disable */
-// @ts-nocheck
 
 'use client';
 
-/*import { LOGIN_URL } from '@/api/config';*/
-import { signIn } from "next-auth/react";
+import React, { useState } from 'react';
+import { LOGIN_URL } from '@/api/config';
 import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
 import Checkbox from '@mui/joy/Checkbox';
@@ -12,15 +11,17 @@ import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginFormSchema } from '@/app/auth/definitions';
-import { z } from 'zod';
 import axios, { HttpStatusCode } from 'axios';
-import React, { useState } from 'react';
+import type { SubmitHandler } from "react-hook-form";
+import { toast } from 'react-hot-toast';
 
-type LoginFormValues = z.infer<typeof LoginFormSchema>;
+type LoginData = {
+  email: string;
+  password: string;
+}
 
-export function LoginForm() {
+export function LoginForm () {
+
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -28,24 +29,16 @@ export function LoginForm() {
     register,
     handleSubmit,
     getFieldState,
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(LoginFormSchema),
-    reValidateMode: 'onChange',
-  });
+  } = useForm<LoginData>();
 
-  const onSubmit = async (data: LoginFormValues) => {
-    setServerError(null); 
+  const onSubmit: SubmitHandler<LoginData> = async (data) => {
+    setServerError(null);
+
     try {
-      const { email, password } = data;
-
-      const response = await signIn("djangoLogin", {
-        username: email,
-        password: password,
-        redirect: false
-      });
-
+      const response = await axios.post(LOGIN_URL, data);
       if (response?.status === HttpStatusCode.Ok) {
-        router.replace('/dashboard');
+        toast.success('Login successful!');
+        router.push('/dashboard');
         return;
       }
 
@@ -58,12 +51,12 @@ export function LoginForm() {
         errorMessage = error.response.data?.detail || 'Invalid login credentials.';
       }
 
-      setServerError(errorMessage); // Set the error message to be displayed
+      setServerError(errorMessage); 
     }
   };
 
   return (
-    <form className='max-w-2xl items-center mx-auto pt-10'>
+    <form className='max-w-2xl items-center mx-auto pt-10' onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4 my-auto">
         <div>
           <Label htmlFor="email">Email: </Label>
@@ -73,7 +66,7 @@ export function LoginForm() {
             placeholder="Enter your email"
             type="email"
             {...register('email')}
-            className={getFieldState('email')?.error ? 'border-red-500' : '', 'mt-2'}
+            className={getFieldState('email')?.error ? 'border-red-500 mt-2' : 'mt-2'}
           />
           {getFieldState('email')?.error && (
             <p className="text-sm text-red-500">{getFieldState('email')?.error?.message}</p>
@@ -90,7 +83,7 @@ export function LoginForm() {
             placeholder="Enter your password"
             autoComplete="current-password"
             {...register('password')}
-            className={getFieldState('password')?.error ? 'border-red-500' : '', 'mt-2'}
+            className={getFieldState('password')?.error ? 'border-red-500 mt-2' : 'mt-2'}
           />
           {getFieldState('password')?.error && (
             <p className="text-sm text-red-500">{getFieldState('password')?.error?.message}</p>
@@ -109,7 +102,10 @@ export function LoginForm() {
         {serverError && (
           <p className="text-sm text-red-500 mt-2">{serverError}</p>
         )}
-        <Button color="danger" onClick={handleSubmit(onSubmit)} className="mt-4 w-full p-4 rounded-full">
+        <Button 
+        type="submit" 
+        color="danger" 
+        className="mt-4 w-full p-4 rounded-full">
           Sign In
         </Button>
       </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Onest } from 'next/font/google'
+import { Toaster } from 'react-hot-toast';
 import "./globals.css";
 
 const onest = Onest({
@@ -22,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={onest.className}>
       <body
-        font-family="onset"
         className={`${onest.className} antialiased`}
       >
+      <Toaster position="top-center" />
         {children}
       </body>
     </html>

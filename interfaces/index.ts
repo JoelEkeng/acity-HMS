@@ -45,3 +45,4 @@ export interface MaintenanceTicket {
   updatedAt: string;
   assignedTo?: string;
 }
+

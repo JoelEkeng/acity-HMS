@@ -1,0 +1,1 @@
+export const LOGIN_URL = 'https://acityhost-backend.onrender.com/api/login'

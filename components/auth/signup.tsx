@@ -1,13 +1,67 @@
-import React from "react";
+'use client'
+
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Lock, Mail, UserRound } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button"
-import Input from '@mui/joy/Input';
-import { Card, CardContent,} from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import Input from "@mui/joy/Input";
+import { Card, CardContent } from "@/components/ui/card";
+import axios from 'axios';
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast"; // Consider using a toast library for better UX
+
+type Inputs = {
+  fullName: string;
+  email: string;
+  password: string;
+};
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [issubmitting, setIsSubmitting] = useState(false); // Track submission state
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setApiError(null); 
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post('https://acityhost-backend.onrender.com/api/register', data);
+      if (response.status === 201) {
+        toast.success('Account created successfully!');
+        reset();
+        router.push('/login');
+      }
+    } catch (error){
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 500) {
+          // Check if the error is about duplicate email
+          if (error.response.data?.message?.includes('email')) {
+            setApiError('This email is already registered. Please use a different email.');
+          } else {
+            setApiError('Server error. Please try again later.');
+          }
+        } else {
+          setApiError(error.response?.data?.message || 'An error occurred during registration.');
+        }
+      } else {
+        setApiError('An unexpected error occurred.');
+        console.error('Error during signup:', error);
+      }
+    }
+  };
+
   return (
     <section className="min-h-screen bg-gradient-to-br from-red-50 to-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -35,7 +89,7 @@ const SignUpForm = () => {
                 <p className="mt-3">
                   Already have an account?{" "}
                   <Link
-                    href="/login "
+                    href="/login"
                     className="text-red-600 hover:text-primary-700 font-medium"
                   >
                     Sign in
@@ -43,7 +97,14 @@ const SignUpForm = () => {
                 </p>
               </div>
 
-              <div className="space-y-4">
+              {/* Display API error if exists */}
+              {apiError && (
+                <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+                  {apiError}
+                </div>
+              )}
+
+              <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Full Name</Label>
                   <div className="relative">
@@ -54,7 +115,14 @@ const SignUpForm = () => {
                       type="text"
                       placeholder="John Doe"
                       className="pl-10 h-11 focus:outline-none rounded-md focus:ring-0 focus-visible:ring-0"
+                      {...register("fullName", {
+                        required: "Full name is required"})}
                     />
+                    {errors.fullName && (
+                      <p className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.fullName.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -68,7 +136,19 @@ const SignUpForm = () => {
                       type="email"
                       placeholder="you@example.com"
                       className="pl-10 h-11 focus:outline-none focus:ring-0 focus-visible:ring-0"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                          message: "Invalid email address",
+                        },
+                      })}
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -82,18 +162,36 @@ const SignUpForm = () => {
                       type="password"
                       placeholder="••••••••"
                       className="pl-10 h-11 focus-visible:ring-0"
+                      {...register("password", {
+                        required: "Password is required",
+                        minLength: {
+                          value: 8,
+                          message: "Password must be at least 8 characters long",
+                        },
+                      })}
                     />
+                    {errors.password && (
+                      <p className="text-red-500 text-sm mt-1" role="alert">
+                        {errors.password.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                <Button className="w-full h-11 bg-red-600 rounded-full hover:bg-green-500 ">Create Account</Button>
-              </div>
+                <Button 
+                  type="submit"
+                  className="w-full h-11 bg-red-600 rounded-full hover:bg-green-500"
+                  disabled={issubmitting}
+                >
+                 {issubmitting ? 'Creating Account...' : 'Create Account'}
+                </Button>
+              </form>
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200" />
                 </div>
-                <div className="relative flex justify-center text-sm ">
+                <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white dark:text-black rounded-md">
                     Or continue with
                   </span>
@@ -129,6 +227,5 @@ const SignUpForm = () => {
     </section>
   );
 };
-
 
 export default SignUpForm;
