@@ -47,11 +47,11 @@ export function HostelTypes() {
     <motion.div
       key="modal"
       initial={{ opacity: 0 }}
-      animate={{ y: 5, opacity: 1, scale: 0.5 }}
-      exit={{ opacity: 0, y: -2 }}
-      transition= {{ ease: "easeInOut", duration: 3}}
-      whileInView={{opacity: 1, scale: 1.1}}
-      viewport={{ once: true, amount: 0.5 }}
+      animate={{ y: 2, opacity: 1, scale: 0.5 }}
+      exit={{ opacity: 0, y: 0 }}
+      transition= {{ ease: "easeIn", duration: 3}}
+      whileInView={{opacity: 1, scale: 1}}
+      viewport={{ once: true, amount: 0.3 }}
      className="relative z-20 py-10 lg:py-40 max-w-7xl mx-auto">
       <div className="px-8">
         <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
