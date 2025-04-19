@@ -112,22 +112,22 @@ export function ApplicationLayout({
           
           <SidebarBody className="mt-12">
             <SidebarSection className="gap-10">
-              <SidebarItem href="admin/dashboard" current={pathname === "/"}>
+              <SidebarItem href="/admin/dashboard" current={pathname === "/"}>
                 <HomeIcon />
                 <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
               </SidebarItem>
 
               <SidebarItem
-                href="admin/dashboard/booking"
-                current={pathname.startsWith("admin/dashboard/booking")}
+                href="/admin/dashboard/booking"
+                current={pathname.startsWith("/admin/dashboard/booking")}
               >
                 <TicketIcon />
                 <SidebarLabel className="font-medium text-lg md:text-xl">Current Occupants</SidebarLabel>
               </SidebarItem>
               
               <SidebarItem
-                href="admin/dashboard/maintenance"
-                current={pathname.startsWith("admin/dashboard/maintenance")}
+                href="/admin/dashboard/maintenance"
+                current={pathname.startsWith("/admin/dashboard/maintenance")}
               >
                 <Square2StackIcon />
                 <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance Log</SidebarLabel>
