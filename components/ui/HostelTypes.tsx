@@ -48,7 +48,7 @@ export function HostelTypes() {
       key="modal"
       initial={{ opacity: 0 }}
       animate={{ y: 5, opacity: 1, scale: 0.5 }}
-      exit={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0, y: -2 }}
       transition= {{ ease: "easeInOut", duration: 3}}
       whileInView={{opacity: 1, scale: 1.1}}
       viewport={{ once: true, amount: 0.5 }}
