@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LOGIN_URL } from '@/api/config';
 import Button from '@mui/joy/Button';
 import Input from '@mui/joy/Input';
@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import axios, { HttpStatusCode } from 'axios';
 import type { SubmitHandler } from "react-hook-form";
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 type LoginData = {
   email: string;
@@ -24,6 +25,7 @@ export function LoginForm () {
 
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
+  const { login, isAuthenticated } = useAuth();
 
   const {
     register,
@@ -31,14 +33,21 @@ export function LoginForm () {
     getFieldState,
   } = useForm<LoginData>();
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
+  
   const onSubmit: SubmitHandler<LoginData> = async (data) => {
     setServerError(null);
 
     try {
       const response = await axios.post(LOGIN_URL, data);
       if (response?.status === HttpStatusCode.Ok) {
+        login(response.data.token, response.data.user);
         toast.success('Login successful!');
-        router.push('/dashboard');
+        // router.push('/dashboard');
         return;
       }
 
