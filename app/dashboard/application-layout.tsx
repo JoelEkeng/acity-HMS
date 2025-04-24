@@ -159,10 +159,10 @@ export function ApplicationLayout({
                   />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      {user.fulName}
+                     Jel
                     </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      {user.email}
+                    Joel.ekeng
                     </span>
                   </span>
                 </span>
