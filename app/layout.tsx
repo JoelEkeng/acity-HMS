@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={onest.className}>
+    <html lang="en" className={onest.className} suppressHydrationWarning>
       <body
         className={`${onest.className} antialiased`}
       >

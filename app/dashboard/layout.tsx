@@ -20,7 +20,7 @@ export default async function RootLayout({
   return (
     <>
       <ApplicationLayout events={events}>
-        {children}
+        {children}  
       </ApplicationLayout>
     </>
   );

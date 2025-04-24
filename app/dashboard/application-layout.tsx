@@ -46,8 +46,9 @@ import {
 } from "@heroicons/react/20/solid";
 import { Divider } from '@/components/dashboard/divider'
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react"
 import Image from 'next/image';
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 function AccountDropdownMenu({
   anchor,
@@ -80,11 +81,20 @@ export function ApplicationLayout({
   children: React.ReactNode;
 }) {
   let pathname = usePathname();
-  /*const session = useSession();
-  if (!session) {
-    console.log("DEBUG::session", session);
-    signOut({callbackUrl: '/login'});
-  }; */
+
+  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  useEffect(() => {
+    axios.get("https://acityhost-backend.onrender.com/api/register", {
+      withCredentials: true,
+    })
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user info:", error);
+      });
+  }, []);
+
 
   return (
     <SidebarLayout
@@ -149,10 +159,10 @@ export function ApplicationLayout({
                   />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      Joel Ekeng
+                      {user.name}
                     </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      joel.ekenga@acity.edu.gh
+                      {user.email}
                     </span>
                   </span>
                 </span>

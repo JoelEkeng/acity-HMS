@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/dashboard/table";
+} from "@/components/dashboard/table";      
 import { getRecentOrders } from "@/data";
 import { noSSR } from "next/dynamic";
 import { CiEdit, CiTrash} from "react-icons/ci";
