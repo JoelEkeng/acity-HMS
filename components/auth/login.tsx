@@ -33,8 +33,8 @@ export function LoginForm() {
     setServerError(null);
 
     try {
-      const response = await axios.post(LOGIN_URL, data);
-      if (response.status === 200) {
+      const response = await axios.post(LOGIN_URL,data);
+      if (response.status === 204 || response.status === 200) {
         toast.success('Login successful!');
         router.push('/dashboard');
       }

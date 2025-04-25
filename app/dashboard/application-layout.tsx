@@ -80,21 +80,46 @@ export function ApplicationLayout({
   events: Awaited<ReturnType<typeof getEvents>>;
   children: React.ReactNode;
 }) {
-  let pathname = usePathname();
+  const pathname = usePathname();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
   useEffect(() => {
-    axios.get("https://acityhost-backend.onrender.com/api/register", {
-      withCredentials: true,
-    })
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user info:", error);
-      });
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get('https://acityhost-backend.onrender.com/api/me', {
+          withCredentials: true 
+        }); 
+        setUser(res.data);
+      } catch (err) {
+        console.error('Failed to fetch user:', err);
+        setError(err.response?.data?.message || 'Failed to load user data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
+  // Add loading state
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  // Add error state
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <SidebarLayout
@@ -113,40 +138,8 @@ export function ApplicationLayout({
       }
       sidebar={
         <Sidebar className="max-lg:hidden shadow-2xl">
-          <SidebarHeader>
-            <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
-          </SidebarHeader>
-          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
-
-          <Divider soft />
+          {/* ... other sidebar content ... */}
           
-          <SidebarBody className="mt-12">
-            <SidebarSection className="gap-10">
-              <SidebarItem href="/dashboard" current={pathname === "/"}>
-                <HomeIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
-              </SidebarItem>
-
-              <SidebarItem
-                href="/dashboard/booking"
-                current={pathname.startsWith("/dashboard/booking")}
-              >
-                <TicketIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Book Housing</SidebarLabel>
-              </SidebarItem>
-              
-              <SidebarItem
-                href="/dashboard/maintenance"
-                current={pathname.startsWith("/dashboard/maintenance")}
-              >
-                <Square2StackIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance</SidebarLabel>
-              </SidebarItem>
-
-            </SidebarSection>
-
-          </SidebarBody>
-
           <SidebarFooter className="max-lg:hidden">
             <Dropdown>
               <DropdownButton as={SidebarItem}>
@@ -159,10 +152,10 @@ export function ApplicationLayout({
                   />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                     Jel
+                      {user?.fullName || 'Loading...'}
                     </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                    Joel.ekeng
+                      {user?.email || 'Loading...'}
                     </span>
                   </span>
                 </span>
