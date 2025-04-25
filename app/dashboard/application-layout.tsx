@@ -88,9 +88,9 @@ export function ApplicationLayout({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get('https://acityhost-backend.onrender.com/api/me', {
-          withCredentials: true 
-        }); 
+        const response = await axios.get("https://acityhost-backend.onrender.com/api/me", {
+          withCredentials: true,
+        });
         setUser(res.data);
       } catch (err) {
         console.error('Failed to fetch user:', err);
