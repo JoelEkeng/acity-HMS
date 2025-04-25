@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('authToken')?.value;
   const { pathname } = request.nextUrl;
 
-  const publicRoutes = ['/login', '/register', '/', '/dashboard'];
+  const publicRoutes = ['/login', '/register', '/'];
 
   // Redirect to dashboard if logged in and trying to access auth pages
   if (publicRoutes.includes(pathname) && token) {

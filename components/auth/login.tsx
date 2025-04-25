@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import Cookies from 'js-cookie';
+
 
 type LoginData = {
   email: string;
@@ -36,7 +38,7 @@ export function LoginForm() {
       const response = await axios.post(LOGIN_URL,data);
       if (response.status === 204 || response.status === 200) {
         toast.success('Login successful!');
-        localStorage.setItem("token", response.data.token);
+        Cookies.set('authToken', response.data.token, { expires: 7 });
         router.push('/dashboard');
       }
     } catch (error: any) {
