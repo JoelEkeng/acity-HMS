@@ -36,6 +36,7 @@ export function LoginForm() {
       const response = await axios.post(LOGIN_URL,data);
       if (response.status === 204 || response.status === 200) {
         toast.success('Login successful!');
+        localStorage.setItem("token", response.data.token);
         router.push('/dashboard');
       }
     } catch (error: any) {

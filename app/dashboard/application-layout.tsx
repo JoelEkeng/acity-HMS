@@ -88,10 +88,14 @@ export function ApplicationLayout({
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        const token = localStorage.getItem("token");
         const response = await axios.get('https://acityhost-backend.onrender.com/api/me', {
-          withCredentials: true
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
         });        
-        setUser(res.data);
+        setUser(response.data); // fixed here
       } catch (err) {
         console.error('Failed to fetch user:', err);
         setError(err.response?.data?.message || 'Failed to load user data');
@@ -99,10 +103,10 @@ export function ApplicationLayout({
         setLoading(false);
       }
     };
-
+  
     fetchUser();
   }, []);
-
+  
   // Add loading state
   if (loading) {
     return (
@@ -138,7 +142,40 @@ export function ApplicationLayout({
       }
       sidebar={
         <Sidebar className="max-lg:hidden shadow-2xl">
-          {/* ... other sidebar content ... */}
+          <SidebarHeader>
+            <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
+          </SidebarHeader>
+          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
+
+          <Divider soft />
+          
+          <SidebarBody className="mt-12">
+            <SidebarSection className="gap-10">
+              <SidebarItem href="/dashboard" current={pathname === "/"}>
+                <HomeIcon />
+                <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
+              </SidebarItem>
+
+              <SidebarItem
+                href="/dashboard/booking"
+                current={pathname.startsWith("/dashboard/booking")}
+              >
+                <TicketIcon />
+                <SidebarLabel className="font-medium text-lg md:text-xl">Book Housing</SidebarLabel>
+              </SidebarItem>
+              
+              <SidebarItem
+                href="/dashboard/maintenance"
+                current={pathname.startsWith("/dashboard/maintenance")}
+              >
+                <Square2StackIcon />
+                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance</SidebarLabel>
+              </SidebarItem>
+
+            </SidebarSection>
+
+          </SidebarBody>
+
           
           <SidebarFooter className="max-lg:hidden">
             <Dropdown>
