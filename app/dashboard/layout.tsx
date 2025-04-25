@@ -4,7 +4,7 @@ import { getEvents } from "@/data";
 import "@/styles/tailwind.css";
 import { Metadata } from "next";
 import { ApplicationLayout } from "./application-layout";
-
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title:  "ACityHost",
@@ -19,9 +19,11 @@ export default async function RootLayout({
 
   return (
     <>
+    <AuthProvider>
       <ApplicationLayout events={events}>
         {children}  
       </ApplicationLayout>
+    </AuthProvider>
     </>
   );
 }

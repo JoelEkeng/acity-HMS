@@ -49,6 +49,7 @@ import { usePathname } from "next/navigation";
 import Image from 'next/image';
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 function AccountDropdownMenu({
   anchor,
@@ -81,32 +82,9 @@ export function ApplicationLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { user, loading, error } = useAuth();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get('https://acityhost-backend.onrender.com/api/me', {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }
-        });        
-        setUser(response.data); // fixed here
-      } catch (err) {
-        console.error('Failed to fetch user:', err);
-        setError(err.response?.data?.message || 'Failed to load user data');
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchUser();
-  }, []);
-  
+
   // Add loading state
   if (loading) {
     return (
