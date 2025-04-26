@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Onest } from 'next/font/google'
 import { Toaster } from 'react-hot-toast';
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 const onest = Onest({
   weight: '400',
@@ -26,7 +27,9 @@ export default function RootLayout({
         className={`${onest.className} antialiased`}
       >
       <Toaster position="top-center" />
+      <AuthProvider>
         {children}
+      </AuthProvider>
       </body>
     </html>
   );

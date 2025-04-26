@@ -24,16 +24,17 @@ import {
   DropdownMenu,
 } from "@/components/dashboard/dropdown";
 import { NavbarItem } from "@/components/dashboard/navbar";
-import { signOut } from "next-auth/react";
+import { logout } from '@/context/AuthContext';
 
 function AccountDropdownMenu({ anchor }: { anchor: "top start" | "bottom end" }) {
+  const { logout } = useAuth();
   return (
     <DropdownMenu className="min-w-64" anchor={anchor}>
       <DropdownItem href="#">
         <DropdownLabel>My account</DropdownLabel>
       </DropdownItem>
       <DropdownDivider />
-      <DropdownItem onClick={() => signOut({ callbackUrl: "/login" })}>
+      <DropdownItem onClick={logout}>
         <DropdownLabel>Sign out</DropdownLabel>
       </DropdownItem>
     </DropdownMenu>

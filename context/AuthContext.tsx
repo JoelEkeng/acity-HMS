@@ -59,11 +59,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setError('Failed to fetch user data');
 
             if (err.response?.status === 401) {
-                toast.error("Unauthorized access. Redirecting to login...");
+                /* toast.error("Unauthorized access. Redirecting to login...");
                 Cookies.remove('authToken');
                 setTimeout(() => {
                     window.location.href = '/login';
-                }, 2000);
+                }, 2000); */
+                setUser(null);
             }
         } finally {
             setLoading(false);
@@ -83,7 +84,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       return (
         <AuthContext.Provider value={{ user, loading, error, refreshUser: fetchUser, logout }}>
-          {children}
+          {loading ? (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+        </div>
+      ) : (
+        children
+      )}
         </AuthContext.Provider>
       );
     };

@@ -1,114 +1,138 @@
 /* eslint-disable */
-// @ts-nocheck
+'use client';
 
-'use client'
+import React, { useState, useEffect } from 'react';
+import { LOGIN_URL } from '@/api/config';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import Cookies from 'js-cookie';
+import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { Input } from "@/components/dashboard/input";
-import { Button } from "@/components/ui/button";
-import { toast } from "react-hot-toast";
+type LoginData = {
+  email: string;
+  password: string;
+};
 
-// 1. Zod validation schema
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-});
-
-export default function LoginPage() {
+export function LoginForm() {
   const router = useRouter();
-  const { user, refreshUser } = useAuth(); 
-  const [loading, setLoading] = useState(false);
+  const { user, refreshUser } = useAuth();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const form = useForm({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginData>();
 
-  // 2. On form submit
-  const onSubmit = async (values: any) => {
-    setLoading(true);
+  const onSubmit = async (data: LoginData) => {
+    setServerError(null);
+    setSubmitting(true);
 
     try {
-      const response = await axios.post("https://acityhost-backend.onrender.com/api/login", values, {
-        withCredentials: true,
-      });
+      const response = await axios.post(LOGIN_URL, data, { withCredentials: true });
 
-      toast.success("Login successful!");
+      if (response.status === 200) {
+        toast.success('Login successful!');
 
-      await refreshUser(); 
+        Cookies.set('authToken', response.data.token, {
+          expires: 7,
+          sameSite: 'Strict',
+          secure: true,
+        });
 
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err?.response?.data?.message || "Login failed");
+        // Refresh the user session after login
+        refreshUser();
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
+      let errorMessage = 'Something went wrong. Please try again.';
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      setServerError(errorMessage);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
-  // 3. Redirect automatically after login
   useEffect(() => {
     if (user) {
       if (user.role === 'admin') {
-        router.push("/admin/dashboard"); 
+        router.push('/admin/dashboard');
       } else {
-        router.push("/dashboard");
+        router.push('/dashboard');
       }
     }
-  }, [user]);
+  }, [user, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-zinc-900 p-4">
-      <div className="w-full max-w-md space-y-8 p-8 bg-white dark:bg-zinc-800 rounded-xl shadow-lg">
-        <h1 className="text-2xl font-bold text-center text-zinc-900 dark:text-white">Login</h1>
-
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Email Field */}
-          <div>
-            <label className="text-sm font-medium">Email</label>
-            <Input
-              type="email"
-              placeholder="you@example.com"
-              {...form.register("email")}
-              className="mt-1"
-            />
-            {form.formState.errors.email && (
-              <p className="text-red-500 text-sm mt-1">{form.formState.errors.email.message}</p>
-            )}
-          </div>
-
-          {/* Password Field */}
-          <div>
-            <label className="text-sm font-medium">Password</label>
-            <Input
-              type="password"
-              placeholder="Your password"
-              {...form.register("password")}
-              className="mt-1"
-            />
-            {form.formState.errors.password && (
-              <p className="text-red-500 text-sm mt-1">{form.formState.errors.password.message}</p>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-2"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </Button>
-        </form>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div>
+        <Label htmlFor="email" className="text-sm text-zinc-700 dark:text-zinc-300">
+          Email
+        </Label>
+        <input
+          id="email"
+          type="email"
+          autoComplete="email"
+          placeholder="you@example.com"
+          {...register('email', { required: 'Email is required' })}
+          className="mt-2 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white dark:placeholder:text-zinc-500"
+        />
+        {errors.email && (
+          <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
+        )}
       </div>
-    </div>
+
+      <div>
+        <Label htmlFor="password" className="text-sm text-zinc-700 dark:text-zinc-300">
+          Password
+        </Label>
+        <input
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          placeholder="••••••••"
+          {...register('password', { required: 'Password is required' })}
+          className="mt-2 w-full rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white dark:placeholder:text-zinc-500"
+        />
+        {errors.password && (
+          <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
+        )}
+      </div>
+
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="remember"
+            className="rounded border-zinc-300 dark:border-zinc-600"
+          />
+          <label htmlFor="remember" className="text-zinc-600 dark:text-zinc-400">
+            Remember me
+          </label>
+        </div>
+        <Link href="#" className="text-red-500 hover:underline">
+          Forgot password?
+        </Link>
+      </div>
+
+      {serverError && (
+        <p className="text-sm text-red-500 text-center">{serverError}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold shadow-lg transition duration-300"
+      >
+        {submitting ? 'Signing In...' : 'Sign In'}
+      </button>
+    </form>
   );
 }
