@@ -24,7 +24,7 @@ import {
   DropdownMenu,
 } from "@/components/dashboard/dropdown";
 import { NavbarItem } from "@/components/dashboard/navbar";
-import { logout } from '@/context/AuthContext';
+import { useAuth } from "@/context/AuthContext";
 
 function AccountDropdownMenu({ anchor }: { anchor: "top start" | "bottom end" }) {
   const { logout } = useAuth();
