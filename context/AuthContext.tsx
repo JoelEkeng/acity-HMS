@@ -5,7 +5,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
-
+import toast from "react-hot-toast";
 interface User {
     id: string,
     studentId: string,
@@ -55,6 +55,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(null);
             setError(err.response?.data?.message || 'Failed to load user data');
             setError('Failed to fetch user data');
+
+            if (err.response?.status === 401) {
+                toast.error("Unauthorized access. Redirecting to login...");
+                Cookies.remove('authToken');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            }
         } finally {
             setLoading(false);
         }
