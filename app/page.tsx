@@ -20,9 +20,6 @@ export default function Home() {
         </Typography>
         <TypewriterEffect />
       </div>
-      <Button color="danger" href="/login" className="rounded-full px-4 py-2 xs:text-lg lg:text-2xl shadow-2xl flex gap-4 transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 mx-auto">
-        <Typography fontFamily={"inherit"} sx={{color: "white"}} >Get Started</Typography> 
-      </Button>
       </main>
     </div>
     <Feature />
