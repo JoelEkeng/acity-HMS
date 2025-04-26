@@ -1,11 +1,11 @@
-/*eslint-disable*/
-
-"use client"
+"use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
-import Cookies from 'js-cookie';
-import toast from "react-hot-toast";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { SessionExpiredModal } from "@/components/modals/SessionExpiredModal"; 
+
 interface User {
     id: string,
     studentId: string,
@@ -26,45 +26,41 @@ interface AuthContextType {
     logout: () => void;
 }
 
-// const AuthContext = createContext<AuthContextType | undefined>({
-//     user: null,
-//     loading: true,
-//     error: null,
-//     refreshUser: () => {},
-//     logout: () => {},
-// });
-const AuthContext = createContext<AuthContextType>(null as unknown as AuthContextType);
-
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showSessionExpired, setShowSessionExpired] = useState(false);
+    const router = useRouter();
 
     const fetchUser = async () => {
         setLoading(true);
         try {
             const token = Cookies.get('authToken');
+            if (!token) {
+                setUser(null);
+                setLoading(false);
+                return;
+            }
+
             const response = await axios.get("https://acityhost-backend.onrender.com/api/me", {
                 withCredentials: true,
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              });
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
             setUser(response.data);
             setError(null);
-        } catch (err:any) {
+        } catch (err: any) {
+            console.error('Fetch user error:', err.message);
             setUser(null);
-            setError(err.response?.data?.message || 'Failed to load user data');
-            setError('Failed to fetch user data');
-
-            if (err.response?.status === 401) {
-                /* toast.error("Unauthorized access. Redirecting to login...");
-                Cookies.remove('authToken');
-                setTimeout(() => {
-                    window.location.href = '/login';
-                }, 2000); */
-                setUser(null);
+            Cookies.remove('authToken');
+            setShowSessionExpired(true);
+            if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError('Failed to fetch user data.');
             }
         } finally {
             setLoading(false);
@@ -73,32 +69,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = () => {
         Cookies.remove('authToken');
-        toast.success("Logged out successfully");
         setUser(null);
-        window.location.href = '/';
-      };
+        router.push('/login');
+    };
 
     useEffect(() => {
         fetchUser();
-      }, []);
+    }, []);
 
-      return (
+    return (
         <AuthContext.Provider value={{ user, loading, error, refreshUser: fetchUser, logout }}>
-          {loading ? (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
-        </div>
-      ) : (
-        children
-      )}
+            {showSessionExpired && (
+                <SessionExpiredModal 
+                  onClose={() => setShowSessionExpired(false)} 
+                  onLogin={() => router.push('/login')}
+                />
+            )}
+            {children}
         </AuthContext.Provider>
-      );
-    };
-    export const useAuth = () => {
-      const context = useContext(AuthContext);
-      if (!context) {
+    );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
         throw new Error("useAuth must be used within an AuthProvider");
-      }
-      return context;
     }
-    
+    return context;
+};
