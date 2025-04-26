@@ -35,7 +35,7 @@ export function LoginForm() {
     setServerError(null);
 
     try {
-      const response = await axios.post(LOGIN_URL,data);
+      const response = await axios.post(LOGIN_URL,data, { withCredentials: true });
       if (response.status === 204 || response.status === 200) {
         toast.success('Login successful!');
         Cookies.set('authToken', response.data.token, { expires: 7 });

@@ -12,7 +12,7 @@ interface User {
     fullName: string,
     email: string,
     roomNumber: string,
-    maintenanceLog: [],
+    maintenanceLogs: [],
     paymentsHistory: [],
     BookingHistory: [],
     role: string,
@@ -26,13 +26,15 @@ interface AuthContextType {
     logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>({
-    user: null,
-    loading: true,
-    error: null,
-    refreshUser: () => {},
-    logout: () => {},
-});
+// const AuthContext = createContext<AuthContextType | undefined>({
+//     user: null,
+//     loading: true,
+//     error: null,
+//     refreshUser: () => {},
+//     logout: () => {},
+// });
+const AuthContext = createContext<AuthContextType>(null as unknown as AuthContextType);
+
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -69,8 +71,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem("token");
+        Cookies.remove('authToken');
+        toast.success("Logged out successfully");
         setUser(null);
+        window.location.href = '/';
       };
 
     useEffect(() => {
@@ -83,5 +87,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         </AuthContext.Provider>
       );
     };
-
-export const useAuth = () => useContext(AuthContext);
+    export const useAuth = () => {
+      const context = useContext(AuthContext);
+      if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider");
+      }
+      return context;
+    }
+    

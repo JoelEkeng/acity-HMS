@@ -1,5 +1,5 @@
 /* eslint-disable */
-//@ts-nocheck
+// @ts-nocheck
 
 "use client";
 
@@ -33,156 +33,156 @@ import { getEvents } from "@/data";
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronUpIcon,
-  LightBulbIcon,
-  ShieldCheckIcon,
-  UserCircleIcon,
-} from "@heroicons/react/16/solid";
-import {
-  Cog6ToothIcon,
   HomeIcon,
-  Square2StackIcon,
   TicketIcon,
-  ArrowPathRoundedSquareIcon,
+  Square2StackIcon,
+  Bars3Icon,
 } from "@heroicons/react/20/solid";
-import { Divider } from '@/components/dashboard/divider'
+import { Divider } from "@/components/dashboard/divider";
 import { usePathname } from "next/navigation";
-import Image from 'next/image';
-import axios from "axios";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "next-themes";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
-function AccountDropdownMenu({
-  anchor,
-}: {
-  anchor: "top start" | "bottom end";
-}) {
+function AccountDropdownMenu({ anchor }) {
+  const { logout } = useAuth();
   return (
     <DropdownMenu className="min-w-64" anchor={anchor}>
       <DropdownItem href="#">
-        <UserCircleIcon />
-        <DropdownLabel>My account</DropdownLabel>
+        <Avatar src="/user/avatar.png" className="size-8" />
+        <DropdownLabel>My Account</DropdownLabel>
       </DropdownItem>
       <DropdownDivider />
-      
-      <DropdownDivider />
-      <DropdownItem onClick={()=>signOut({callbackUrl: '/login'})}>
-        <ArrowRightStartOnRectangleIcon />
-        <DropdownLabel>Sign out</DropdownLabel>
+      <DropdownItem onClick={logout}>
+        <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
+        <DropdownLabel>Sign Out</DropdownLabel>
       </DropdownItem>
     </DropdownMenu>
   );
 }
 
-
-export function ApplicationLayout({
-  events,
-  children,
-}: {
-  events: Awaited<ReturnType<typeof getEvents>>;
-  children: React.ReactNode;
-}) {
+export function ApplicationLayout({ events, children }) {
   const pathname = usePathname();
   const { user, loading, error } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
-  // Add loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary border-opacity-50"></div>
       </div>
     );
   }
 
-  // Add error state
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-red-500">{error}</div>
+        <p className="text-red-500">{error}</p>
       </div>
     );
   }
 
   return (
-    <SidebarLayout
-      navbar={
-        <Navbar>
-          <NavbarSpacer />
-          <NavbarSection>
-            <Dropdown>
-              <DropdownButton as={NavbarItem}>
-                <Avatar src="/user/avatar.png" square />
-              </DropdownButton>
-              <AccountDropdownMenu anchor="bottom end" />
-            </Dropdown>
-          </NavbarSection>
-        </Navbar>
-      }
-      sidebar={
-        <Sidebar className="max-lg:hidden shadow-2xl">
-          <SidebarHeader>
-            <Image src="/logo.png" alt="logo" width={250} height={250} className="mx-auto"/>
-          </SidebarHeader>
-          <SidebarHeading className="font-semibold text-center md:text-3xl -mt-4 mb-12 text-black dark:text-white ">ACityHost</SidebarHeading>
+    <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors">
+      {/* Top Navbar */}
+      <Navbar className="sticky top-0 z-50 bg-white/70 dark:bg-zinc-900/80 backdrop-blur-md shadow-sm border-b border-zinc-200 dark:border-zinc-800">
+        <NavbarSection>
+          {/* Sidebar Toggle on mobile */}
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="lg:hidden p-2 rounded-md hover:bg-muted"
+          >
+            <Bars3Icon className="h-6 w-6" />
+          </button>
+        </NavbarSection>
 
-          <Divider soft />
-          
-          <SidebarBody className="mt-12">
-            <SidebarSection className="gap-10">
-              <SidebarItem href="/dashboard" current={pathname === "/"}>
-                <HomeIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Home</SidebarLabel>
-              </SidebarItem>
+        <NavbarSpacer />
 
-              <SidebarItem
-                href="/dashboard/booking"
-                current={pathname.startsWith("/dashboard/booking")}
-              >
-                <TicketIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Book Housing</SidebarLabel>
-              </SidebarItem>
-              
-              <SidebarItem
-                href="/dashboard/maintenance"
-                current={pathname.startsWith("/dashboard/maintenance")}
-              >
-                <Square2StackIcon />
-                <SidebarLabel className="font-medium text-lg md:text-xl">Maintenance</SidebarLabel>
-              </SidebarItem>
+        <NavbarSection className="flex items-center gap-3">
+          {/* Theme Toggle */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-md hover:bg-muted"
+          >
+            {theme === "dark" ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
+          </button>
 
-            </SidebarSection>
+          {/* User Dropdown */}
+          <Dropdown>
+            <DropdownButton as={NavbarItem}>
+              <Avatar src="/user/avatar.png" className="size-8" />
+            </DropdownButton>
+            <AccountDropdownMenu anchor="bottom end" />
+          </Dropdown>
+        </NavbarSection>
+      </Navbar>
 
-          </SidebarBody>
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <aside
+          className={`fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-zinc-900 shadow-md border-r border-zinc-200 dark:border-zinc-800 transform transition-transform duration-300 ease-in-out ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:static lg:translate-x-0`}
+        >
+          <Sidebar className="flex flex-col h-full">
+            {/* Logo + App Name */}
+            <SidebarHeader className="flex justify-center p-6">
+              <Image src="/logo.png" alt="logo" width={120} height={120} className="object-contain" />
+            </SidebarHeader>
 
-          
-          <SidebarFooter className="max-lg:hidden">
-            <Dropdown>
-              <DropdownButton as={SidebarItem}>
-                <span className="flex min-w-0 items-center gap-3">
-                  <Avatar
-                    src="/user/avatar.png"
-                    className="size-10"
-                    square
-                    alt=""
-                  />
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      {user?.fullName || 'Loading...'}
-                    </span>
-                    <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      {user?.email || 'Loading...'}
-                    </span>
-                  </span>
-                </span>
-                <ChevronUpIcon />
-              </DropdownButton>
-              <AccountDropdownMenu anchor="top start" />
-            </Dropdown>
-          </SidebarFooter>
-        </Sidebar>
-      }
-    >
-      {children}
-    </SidebarLayout>
+            <SidebarHeading className="text-center text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
+              ACityHost
+            </SidebarHeading>
+
+            <Divider soft className="my-4" />
+
+            {/* Links */}
+            <SidebarBody className="flex-1 overflow-y-auto">
+              <SidebarSection className="space-y-2">
+                <SidebarItem href="/dashboard" current={pathname === "/dashboard"}>
+                  <HomeIcon className="h-5 w-5" />
+                  <SidebarLabel>Home</SidebarLabel>
+                </SidebarItem>
+
+                <SidebarItem href="/dashboard/booking" current={pathname.startsWith("/dashboard/booking")}>
+                  <TicketIcon className="h-5 w-5" />
+                  <SidebarLabel>Book Housing</SidebarLabel>
+                </SidebarItem>
+
+                <SidebarItem href="/dashboard/maintenance" current={pathname.startsWith("/dashboard/maintenance")}>
+                  <Square2StackIcon className="h-5 w-5" />
+                  <SidebarLabel>Maintenance</SidebarLabel>
+                </SidebarItem>
+              </SidebarSection>
+            </SidebarBody>
+
+            {/* Profile */}
+            <SidebarFooter className="p-4 border-t border-zinc-200 dark:border-zinc-800">
+              <Dropdown>
+                <DropdownButton as={SidebarItem} className="p-2 rounded-lg hover:bg-muted">
+                  <div className="flex items-center gap-3">
+                    <Avatar src="/user/avatar.png" className="size-8" />
+                    <div className="flex flex-col text-left truncate">
+                      <span className="font-semibold truncate">{user?.fullName || "Loading..."}</span>
+                      <span className="text-xs text-muted-foreground truncate">{user?.email || "Loading..."}</span>
+                    </div>
+                  </div>
+                  <ChevronUpIcon className="h-5 w-5 ml-auto" />
+                </DropdownButton>
+                <AccountDropdownMenu anchor="top start" />
+              </Dropdown>
+            </SidebarFooter>
+          </Sidebar>
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto p-6 bg-zinc-50 dark:bg-zinc-950">
+          {children}
+        </main>
+      </div>
+    </div>
   );
 }

@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/dashboard/input"
 import { Textarea } from "@/components/dashboard/textarea"
+import Cookies from 'js-cookie';
 
 const formSchema = z.object({
   category: z.string().nonempty({ message: "Select a category" }),
@@ -25,6 +26,7 @@ const formSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   image: z.any().optional(),
+  studentId: z.string().nonempty("Student ID is required"),
 })
 
 export function MaintenanceForm() {
@@ -40,6 +42,7 @@ export function MaintenanceForm() {
       roomNumber: "",
       title: "",
       description: "",
+      studentId: "10211100294"
     },
   })
 
@@ -47,22 +50,57 @@ export function MaintenanceForm() {
     setSubmitting(true)
     setErrorMsg("")
     setSuccessMsg("")
-
+  
     try {
-      const formData = new FormData()
-      formData.append("category", values.category)
-      formData.append("roomNumber", values.roomNumber)
-      formData.append("title", values.title)
-      formData.append("description", values.description)
-      if (file) {
-        formData.append("image", file)
+      const token = Cookies.get('authToken');
+  
+      if (!token) {
+        setErrorMsg("Authentication token missing");
+        return;
       }
-
-      await axios.post("https://acityhost-backend.onrender.com/api/tickets", 
-      formData,  
-      { withCredentials: true }
-      )
-
+  
+      const payload: any = {
+        category: values.category,
+        roomNumber: values.roomNumber,
+        title: values.title,
+        description: values.description,
+        studentId: values.studentId,
+      };
+  
+      // If file selected, use FormData
+      if (file) {
+        const formData = new FormData();
+        Object.keys(payload).forEach(key => {
+          formData.append(key, payload[key]);
+        });
+        formData.append("image", file);
+  
+        await axios.post(
+          "https://acityhost-backend.onrender.com/api/tickets",
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      } else {
+        // else send normal JSON
+        await axios.post(
+          "https://acityhost-backend.onrender.com/api/tickets",
+          payload,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+  
       setSuccessMsg("Complaint submitted successfully.")
       form.reset()
       setFile(null)
@@ -73,7 +111,7 @@ export function MaintenanceForm() {
       setSubmitting(false)
     }
   }
-
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -142,6 +180,22 @@ export function MaintenanceForm() {
               <FormLabel>Detailed Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="Describe the issue in detail" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        
+        {/* Student ID */}
+        <FormField
+          control={form.control}
+          name="studentId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Student ID</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Enter your student ID" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
