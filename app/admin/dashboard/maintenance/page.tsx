@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
-import MaintenanceList from '@/app/dashboard/maintenance/maintenanceList';
+import MaintenanceList from '@/app/admin/dashboard/maintenance/maintenanceList';
 import axios from 'axios';
 
 export const metadata: Metadata = {
-  title: 'ACityHost Properties',
+  title: 'Admin Maintanenace Portal',
 };
 
 export default async function Maintenances() {
@@ -18,7 +18,7 @@ export default async function Maintenances() {
   }
 
   if (!maintenances?.length) {
-    return <p className="text-center">No properties available at the moment.</p>;
+    return <p className="text-center">No Maintenance request available at the moment.</p>;
   }
 
   return (

@@ -14,7 +14,20 @@ import { MaintenanceForm } from './maintanceForm'
 import { MaintenanceHistory }  from './maintenanceHistory'
 
 export default function MaintenanceList({ properties }: { properties: MaintenanceTicket[] }) {
+ 
   const [activeTab, setActiveTab] = useState<'history' | 'form'>('history')
+
+
+  useEffect(() => {
+    const handleSwitchToHistory = () => setActiveTab('history');
+  
+    window.addEventListener('switch-to-history', handleSwitchToHistory);
+  
+    return () => {
+      window.removeEventListener('switch-to-history', handleSwitchToHistory);
+    };
+  }, []);
+
 
   return (
     <div className="p-4 md:p-8">
@@ -46,7 +59,7 @@ export default function MaintenanceList({ properties }: { properties: Maintenanc
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
-          Maintenance History
+          Maintenance Logs
         </button>
         <button
           onClick={() => setActiveTab('form')}

@@ -1,6 +1,5 @@
-/* eslint-disable */
-// @ts-nocheck
-
+/*eslint-disable*/
+//@ts-nocheck 
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -23,15 +22,16 @@ export default function CoordinatorMaintenanceTracking() {
 
   const fetchTickets = async () => {
     try {
-      const res = await axios.get<MaintenanceTicket[]>('https://acityhost-backend.onrender.com/api/tickets')
-      setTickets(res.data)
+      const res = await axios.get('https://acityhost-backend.onrender.com/api/tickets');
+      console.log('Fetched tickets response:', res.data); // 👈 Add this
+      setTickets(res.data); // Are you sure it's array here? We check
     } catch (err: any) {
-      setError('Failed to load tickets')
+      console.error('Error fetching tickets:', err); // 👈 Add this
+      setError('Failed to load Maintenance Tickets');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
-
   const updateTicket = async (ticketId: string, updates: Partial<MaintenanceTicket>) => {
     try {
       await axios.patch(`https://acityhost-backend.onrender.com/api/tickets/${ticketId}`, updates)
@@ -63,7 +63,6 @@ export default function CoordinatorMaintenanceTracking() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Maintenance Tracking - Coordinator Panel</h1>
 
       <div className="flex justify-end mb-4">
         <Select
@@ -71,10 +70,10 @@ export default function CoordinatorMaintenanceTracking() {
           onChange={(e) => setPriorityFilter(e.target.value)}
           className="border rounded p-2"
         >
-          <option value="">All Priorities</option>
-          <option value="High">High Priority</option>
-          <option value="Medium">Medium Priority</option>
-          <option value="Low">Low Priority</option>
+          <option value="">Sort by All Priorities</option>
+          <option value="High">Sort by High Priority</option>
+          <option value="Medium">Sort by Medium Priority</option>
+          <option value="Low">Sort by Low Priority</option>
         </Select>
       </div>
 

@@ -31,7 +31,7 @@ const accounts = [
 export const Header: React.FC = () => {
     return (
         <div className='flex justify-evenly items-center p-4 '>
-            <Image src="/logo.png" alt="logo" width={100} height={100} />
+            <Image src="/logo.png" alt="logo" width={150} height={150} />
             <div className='flex justify-between items-center space-x-8 rounded-full p-4 shadow-2xl font-semibold'>
                 {links.map((link) => (
                     <Link key={link.href} href={link.href}>

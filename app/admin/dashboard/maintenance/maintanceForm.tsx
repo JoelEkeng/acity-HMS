@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,6 +19,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/dashboard/input"
 import { Textarea } from "@/components/dashboard/textarea"
+import { useAuth } from "@/context/AuthContext"
+import Cookies from "js-cookie"
 
 const formSchema = z.object({
   category: z.string().nonempty({ message: "Select a category" }),
@@ -39,9 +42,11 @@ export function MaintenanceForm() {
       category: "",
       roomNumber: "",
       title: "",
-      description: "",
+      description: ""
     },
   })
+
+  const { refreshUser } = useAuth(); 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setSubmitting(true)
@@ -49,18 +54,62 @@ export function MaintenanceForm() {
     setSuccessMsg("")
 
     try {
-      const formData = new FormData()
-      formData.append("category", values.category)
-      formData.append("roomNumber", values.roomNumber)
-      formData.append("title", values.title)
-      formData.append("description", values.description)
+      const token = Cookies.get('authToken');
+  
+      if (!token) {
+        setErrorMsg("Authentication token missing");
+        return;
+      }
+  
+      const payload: any = {
+        category: values.category,
+        roomNumber: values.roomNumber,
+        title: values.title,
+        description: values.description,
+      };
+  
+      // If file selected, use FormData
       if (file) {
-        formData.append("image", file)
+        const formData = new FormData();
+        Object.keys(payload).forEach(key => {
+          formData.append(key, payload[key]);
+        });
+        formData.append("image", file);
+  
+        await axios.post(
+          "https://acityhost-backend.onrender.com/api/tickets",
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      } else {
+        // else send normal JSON
+        await axios.post(
+          "https://acityhost-backend.onrender.com/api/tickets",
+          payload,
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
       }
 
-      await axios.post("http://localhost:5000/api/tickets", formData)
-
       setSuccessMsg("Complaint submitted successfully.")
+      await refreshUser();
+
+      if (typeof window !== "undefined") {
+        const event = new CustomEvent('switch-to-history');
+        window.dispatchEvent(event);
+      }
+
       form.reset()
       setFile(null)
     } catch (err: any) {

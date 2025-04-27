@@ -92,8 +92,8 @@ const SignUpForm = () => {
             className="absolute inset-0 h-full w-full object-cover"
           />
           <div className="relative z-10 p-12  max-w-lg">
-            <Image src="/logo.png" width={200} height={200} className="m-auto" alt="Acity Logo" />
-            <h1 className="text-xl font-bold mb-6 -mt-2 dark:text-white text-white text-center">
+            <Image src="/logo.png" width={250} height={250} className="m-auto" alt="AcityLogo" />
+            <h1 className="text-xl font-bold mb-6 -mt-2 dark:text-white text-black text-center">
               Acity Hostel Management System
             </h1>
           </div>

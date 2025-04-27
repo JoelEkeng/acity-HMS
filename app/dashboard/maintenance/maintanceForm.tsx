@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/dashboard/input"
 import { Textarea } from "@/components/dashboard/textarea"
 import Cookies from 'js-cookie';
+import { useAuth } from "@/context/AuthContext"
 
 const formSchema = z.object({
   category: z.string().nonempty({ message: "Select a category" }),
@@ -45,6 +46,8 @@ export function MaintenanceForm() {
       studentId: "10211100294"
     },
   })
+
+  const { refreshUser } = useAuth(); 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setSubmitting(true)
@@ -102,6 +105,13 @@ export function MaintenanceForm() {
       }
   
       setSuccessMsg("Complaint submitted successfully.")
+      await refreshUser();
+
+      if (typeof window !== "undefined") {
+        const event = new CustomEvent('switch-to-history');
+        window.dispatchEvent(event);
+      }
+
       form.reset()
       setFile(null)
     } catch (err: any) {

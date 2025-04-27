@@ -52,9 +52,9 @@ export function ApplicationLayout({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "/admin/dashboard", icon: HomeIcon, label: "Home" },
+    { href: "/admin/dashboard/", icon: HomeIcon, label: "Home" },
     { href: "/admin/dashboard/booking", icon: TicketIcon, label: "Current Occupants" },
-    { href: "/admin/dashboard/maintenance", icon: Square2StackIcon, label: "Maintenance Log" },
+    { href: "/admin/dashboard/maintenance", icon: Square2StackIcon, label: "Maintenance / Maintenance Log" },
   ];
 
   const isActive = (href: string) => pathname.startsWith(href);
@@ -83,7 +83,7 @@ export function ApplicationLayout({
                 <Icon className="w-5 h-5" />
                 {label}
                 {isActive(href) && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 rounded transition-all" />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 rounded-2xl transition-all" />
                 )}
               </Link>
             ))}
