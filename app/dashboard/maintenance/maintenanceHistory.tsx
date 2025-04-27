@@ -26,10 +26,8 @@ export function MaintenanceHistory() {
           <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
             <thead className="bg-gray-50 text-xs uppercase tracking-wider text-gray-600">
               <tr>
-                <th className="px-4 py-2">Ticket ID</th>
                 <th className="px-4 py-2">Title</th>
                 <th className="px-4 py-2">Category</th>
-                <th className="px-4 py-2">Room</th>
                 <th className="px-4 py-2">Priority</th>
                 <th className="px-4 py-2">Status</th>
                 <th className="px-4 py-2">Created</th>
@@ -39,10 +37,8 @@ export function MaintenanceHistory() {
             <tbody className="divide-y divide-gray-100 bg-white">
               {tickets.map((ticket: any) => (
                 <tr key={ticket.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 font-mono text-xs text-gray-500">{ticket.id.slice(0, 6)}...</td>
                   <td className="px-4 py-2">{ticket.title}</td>
                   <td className="px-4 py-2">{ticket.category}</td>
-                  <td className="px-4 py-2">{ticket.roomNumber}</td>
                   <td className="px-4 py-2">
                     <Badge variant={
                       ticket.priority === 'High' ? 'destructive' :

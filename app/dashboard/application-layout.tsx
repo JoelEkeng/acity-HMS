@@ -48,8 +48,9 @@ import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 function AccountDropdownMenu({ anchor }) {
   const { logout } = useAuth();
+  const { theme, setTheme } = useTheme();
   return (
-    <DropdownMenu className="min-w-64" anchor={anchor}>
+    <DropdownMenu className="min-w-64 z-50" anchor={anchor}>
       <DropdownItem href="#">
         <Avatar src="/user/avatar.png" className="size-8" />
         <DropdownLabel>My Account</DropdownLabel>
@@ -59,6 +60,15 @@ function AccountDropdownMenu({ anchor }) {
         <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
         <DropdownLabel>Sign Out</DropdownLabel>
       </DropdownItem>
+      <DropdownItem className="flex">
+          <button
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="p-2 rounded-md hover:bg-muted"
+          >
+            {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+          </button>
+          <DropdownLabel>Theme</DropdownLabel>
+      </DropdownItem>
     </DropdownMenu>
   );
 }
@@ -66,7 +76,6 @@ function AccountDropdownMenu({ anchor }) {
 export function ApplicationLayout({ events, children }) {
   const pathname = usePathname();
   const { user, loading, error } = useAuth();
-  const { theme, setTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (loading) {
@@ -88,7 +97,7 @@ export function ApplicationLayout({ events, children }) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors">
       {/* Top Navbar */}
-      <Navbar className="sticky top-0 z-50 bg-white/70 dark:bg-zinc-900/80 backdrop-blur-md shadow-sm border-b border-zinc-200 dark:border-zinc-800">
+      <Navbar className="fixed top-0 z-50 bg-white/70 dark:bg-zinc-900/80 backdrop-blur-md shadow-sm border-b border-zinc-200 dark:border-zinc-800">
         <NavbarSection>
           {/* Sidebar Toggle on mobile */}
           <button
@@ -97,26 +106,6 @@ export function ApplicationLayout({ events, children }) {
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
-        </NavbarSection>
-
-        <NavbarSpacer />
-
-        <NavbarSection className="flex items-center gap-3">
-          {/* Theme Toggle */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-md hover:bg-muted"
-          >
-            {theme === "dark" ? <SunIcon className="h-6 w-6" /> : <MoonIcon className="h-6 w-6" />}
-          </button>
-
-          {/* User Dropdown */}
-          <Dropdown>
-            <DropdownButton as={NavbarItem}>
-              <Avatar src="/user/avatar.png" className="size-8" />
-            </DropdownButton>
-            <AccountDropdownMenu anchor="bottom end" />
-          </Dropdown>
         </NavbarSection>
       </Navbar>
 
@@ -130,10 +119,10 @@ export function ApplicationLayout({ events, children }) {
           <Sidebar className="flex flex-col h-full">
             {/* Logo + App Name */}
             <SidebarHeader className="flex justify-center p-6">
-              <Image src="/logo.png" alt="logo" width={120} height={120} className="object-contain" />
+              <Image src="/logo.png" alt="logo" width={200} height={200} className="object-contain" />
             </SidebarHeader>
 
-            <SidebarHeading className="text-center text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
+            <SidebarHeading className="text-center text-2xl md:text-4xl font-bold tracking-widest text-zinc-900 dark:text-white">
               ACityHost
             </SidebarHeading>
 
@@ -154,7 +143,7 @@ export function ApplicationLayout({ events, children }) {
 
                 <SidebarItem href="/dashboard/maintenance" current={pathname.startsWith("/dashboard/maintenance")}>
                   <Square2StackIcon className="h-5 w-5" />
-                  <SidebarLabel>Maintenance</SidebarLabel>
+                  <SidebarLabel>Report Issues</SidebarLabel>
                 </SidebarItem>
               </SidebarSection>
             </SidebarBody>
