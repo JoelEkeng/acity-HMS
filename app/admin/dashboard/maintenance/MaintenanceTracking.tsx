@@ -40,8 +40,9 @@ export default function CoordinatorMaintenanceTracking() {
       setLoading(false);
     }
   }
-  
+
   const updateTicket = async (ticketId: string, updates: Partial<MaintenanceTicket>) => {
+    const token = Cookies.get('authToken');
     try {
       await axios.patch(`https://acityhost-backend.onrender.com/api/tickets/${ticketId}`, updates,  {
         withCredentials: true,
