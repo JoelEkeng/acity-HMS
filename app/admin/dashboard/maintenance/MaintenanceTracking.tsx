@@ -8,7 +8,7 @@ import { Badge } from '@/components/dashboard/badge'
 import { Select } from '@/components/dashboard/select'
 import { MaintenanceTicket } from '@/interfaces'
 import { useAuth } from '@/context/AuthContext'
-
+import Cookies from 'js-cookie'
 export default function CoordinatorMaintenanceTracking() {
   const { user } = useAuth();
   const [tickets, setTickets] = useState<MaintenanceTicket[]>([])
@@ -21,20 +21,34 @@ export default function CoordinatorMaintenanceTracking() {
   }, [])
 
   const fetchTickets = async () => {
+    const token = Cookies.get('authToken');
     try {
-      const res = await axios.get('https://acityhost-backend.onrender.com/api/tickets');
-      console.log('Fetched tickets response:', res.data); // 👈 Add this
-      setTickets(res.data); // Are you sure it's array here? We check
+      const res = await axios.get('https://acityhost-backend.onrender.com/api/tickets',
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },}
+      );
+      console.log('Fetched tickets response:', res.data); 
+      setTickets(res.data); 
     } catch (err: any) {
-      console.error('Error fetching tickets:', err); // 👈 Add this
+      console.error('Error fetching tickets:', err); 
       setError('Failed to load Maintenance Tickets');
     } finally {
       setLoading(false);
     }
   }
+  
   const updateTicket = async (ticketId: string, updates: Partial<MaintenanceTicket>) => {
     try {
-      await axios.patch(`https://acityhost-backend.onrender.com/api/tickets/${ticketId}`, updates)
+      await axios.patch(`https://acityhost-backend.onrender.com/api/tickets/${ticketId}`, updates,  {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },})
       setTickets((prev) =>
         prev.map((t) => (t.id === ticketId ? { ...t, ...updates } : t))
       )
