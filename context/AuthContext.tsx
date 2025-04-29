@@ -83,7 +83,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             {showSessionExpired && (
                 <SessionExpiredModal 
                   onClose={() => setShowSessionExpired(false)} 
-                  onLogin={() => router.push('/login')}
                 />
             )}
             {children}
