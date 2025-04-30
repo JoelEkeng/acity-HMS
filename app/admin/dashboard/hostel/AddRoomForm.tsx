@@ -15,6 +15,7 @@ export default function AddRoomForm() {
   const [facility, setFacility] = useState('')
   const [startNumber, setStartNumber] = useState(1)
   const [endNumber, setEndNumber] = useState(1)
+  const [activeTab, setActiveTab] = useState<'addRoom' | 'updateRoom'>('addRoom')
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -49,41 +50,66 @@ export default function AddRoomForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md dark:bg-zinc-900">
-      <h2 className="text-lg font-semibold">Add Rooms</h2>
-
-      <input placeholder="Building name" value={building} onChange={e => setBuilding(e.target.value)} className="w-full p-2 border rounded" required />
-
-      <div className="grid grid-cols-2 gap-4">
-        <select onChange={e => setFloor(e.target.value)} required className="p-2 border rounded">
-          <option value="">Select Floor</option>
-          {floors.map(f => <option key={f}>{f}</option>)}
-        </select>
-
-        <select onChange={e => setWing(e.target.value)} required className="p-2 border rounded">
-          <option value="">Select Wing</option>
-          {wings.map(w => <option key={w}>{w}</option>)}
-        </select>
-
-        <select onChange={e => setType(e.target.value)} required className="p-2 border rounded">
-          <option value="">Room Type</option>
-          {roomTypes.map(rt => <option key={rt}>{rt}</option>)}
-        </select>
-
-        <select onChange={e => setFacility(e.target.value)} required className="p-2 border rounded">
-          <option value="">Facilities</option>
-          {roomFacilities.map(f => <option key={f}>{f}</option>)}
-        </select>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <input type="number" placeholder="Start Room #" value={startNumber} onChange={e => setStartNumber(Number(e.target.value))} className="p-2 border rounded" />
-        <input type="number" placeholder="End Room #" value={endNumber} onChange={e => setEndNumber(Number(e.target.value))} className="p-2 border rounded" />
-      </div>
-
-      <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-        Add Rooms
+    <>
+    <div className="flex justify-between items-center mb-4">
+      <button onClick={() => setActiveTab('addRoom')} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Add Rooms 
       </button>
-    </form>
+      <button onClick={() => setActiveTab('updateRoom')} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+        Update Rooms
+      </button>
+    </div>
+
+    {activeTab === 'addRoom' && (
+      <div className="bg-white p-6 rounded-lg shadow-md dark:bg-zinc-900">
+        <h2 className="text-lg font-semibold">Add Rooms</h2>
+          <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md dark:bg-zinc-900">
+            <h2 className="text-lg font-semibold">Add Rooms</h2>
+
+            <input placeholder="Building name" value={building} onChange={e => setBuilding(e.target.value)} className="w-full p-2 border rounded" required />
+
+            <div className="grid grid-cols-2 gap-4">
+              <select onChange={e => setFloor(e.target.value)} required className="p-2 border rounded">
+                <option value="">Select Floor</option>
+                {floors.map(f => <option key={f}>{f}</option>)}
+              </select>
+
+              <select onChange={e => setWing(e.target.value)} required className="p-2 border rounded">
+                <option value="">Select Wing</option>
+                {wings.map(w => <option key={w}>{w}</option>)}
+              </select>
+
+              <select onChange={e => setType(e.target.value)} required className="p-2 border rounded">
+                <option value="">Room Type</option>
+                {roomTypes.map(rt => <option key={rt}>{rt}</option>)}
+              </select>
+
+              <select onChange={e => setFacility(e.target.value)} required className="p-2 border rounded">
+                <option value="">Facilities</option>
+                {roomFacilities.map(f => <option key={f}>{f}</option>)}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <input type="number" placeholder="Start Room #" value={startNumber} onChange={e => setStartNumber(Number(e.target.value))} className="p-2 border rounded" />
+              <input type="number" placeholder="End Room #" value={endNumber} onChange={e => setEndNumber(Number(e.target.value))} className="p-2 border rounded" />
+            </div>
+
+            <button type="submit" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+              Add Rooms
+            </button>
+          </form>
+      </div>
+    )}
+
+    
+    {activeTab === 'updateRoom' && (
+      <div className="bg-white p-6 rounded-lg shadow-md dark:bg-zinc-900">
+        <h2 className="text-lg font-semibold">Update Rooms</h2>
+        {/* Add your update room form here */}
+      </div>
+    )}
+  
+  </>
   )
 }
