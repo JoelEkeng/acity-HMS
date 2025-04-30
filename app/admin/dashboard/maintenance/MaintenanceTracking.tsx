@@ -44,12 +44,12 @@ export default function CoordinatorMaintenanceTracking() {
   const updateTicket = async (ticketId: string, updates: Partial<MaintenanceTicket>) => {
     const token = Cookies.get('authToken');
     try {
-      await axios.patch(`https://acityhost-backend.onrender.com/api/tickets/${ticketId}`, updates,  {
+      await axios.patch(`http://localhost:5000/api/tickets/${ticketId}`, updates,  {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },})
+          "Content-Type": "application/json",
+        },}) 
       setTickets((prev) =>
         prev.map((t) => (t.id === ticketId ? { ...t, ...updates } : t))
       )
