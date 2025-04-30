@@ -53,7 +53,7 @@ export function ApplicationLayout({
 
   const navLinks = [
     { href: "/admin/dashboard/", icon: HomeIcon, label: "Home" },
-    { href: "/admin/dashboard/booking", icon: TicketIcon, label: "Current Occupants" },
+    { href: "/admin/dashboard/hostel", icon: TicketIcon, label: "Current Occupants" },
     { href: "/admin/dashboard/maintenance", icon: Square2StackIcon, label: "Maintenance / Maintenance Log" },
   ];
 
