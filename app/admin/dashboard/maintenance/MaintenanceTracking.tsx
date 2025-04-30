@@ -44,7 +44,7 @@ export default function CoordinatorMaintenanceTracking() {
   const updateTicket = async (ticketId: string, updates: Partial<MaintenanceTicket>) => {
     const token = Cookies.get('authToken');
     try {
-      await axios.patch(`http://localhost:5000/api/tickets/${ticketId}`, updates,  {
+      await axios.patch(`https://acityhost-backend.onrender.com/api/tickets/${ticketId}`, updates,  {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
