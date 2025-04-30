@@ -18,11 +18,10 @@ export default function Reservations() {
     <>
       <div className="gap-4 mb-6">
         <main className="max-sm:w-full sm:flex-1">
-          <Heading>ADMIN OCCUPANT PAGE</Heading>
+          <Heading>Hostel & Room Management</Heading>
         </main>
         <div className="max-w-6xl mx-auto py-10 px-4">
-          <h1 className="text-3xl font-bold mb-8">Hostel & Room Management</h1>
-          <div>
+          <div className='flex justify-between items-end mb-4'>
             <button
               onClick={() => setActiveTab('occupants')}
               className={`px-4 py-2 rounded-md font-medium transition text-sm ${
