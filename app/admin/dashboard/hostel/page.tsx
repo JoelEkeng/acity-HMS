@@ -19,9 +19,7 @@ export default function Reservations() {
       <div className="gap-4 mb-6">
         <main className="max-sm:w-full sm:flex-1">
           <Heading>Hostel & Room Management</Heading>
-        </main>
-        <div className="max-w-6xl mx-auto py-10 px-4">
-          <div className='flex justify-between items-end mb-4'>
+          <div className='flex items-end mb-8'>
             <button
               onClick={() => setActiveTab('occupants')}
               className={`px-4 py-2 rounded-md font-medium transition text-sm ${
@@ -43,7 +41,9 @@ export default function Reservations() {
               Add Room
             </button>
           </div>
-
+        </main>
+        
+        <div className="max-w-6xl mx-auto py-10 px-4">
           <div className="flex flex-wrap gap-2 mb-6">
             {activeTab === 'occupants' && (
               <div className="p-4 border rounded-lg shadow-md">
