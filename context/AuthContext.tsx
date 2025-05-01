@@ -17,6 +17,13 @@ interface User {
     paymentsHistory: [],
     BookingHistory: [],
     role: string,
+    gender?: string,
+    rollNumber?: string,
+    parentName?: string,
+    parentPhone?: string,
+    healthConditions?: string,
+    allergies?: string,
+    emergencyContact?: string,
 }
 
 interface AuthContextType {
@@ -25,6 +32,7 @@ interface AuthContextType {
     error: string | null;
     refreshUser: () => void;
     logout: () => void;
+    needsSetup: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,6 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [showSessionExpired, setShowSessionExpired] = useState(false);
+    const [needsSetup, setNeedsSetup] = useState(false);
     const router = useRouter();
 
     const fetchUser = async () => {
@@ -51,7 +60,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            setUser(response.data);
+            const userData = response.data;
+            setUser(userData);
+            setNeedsSetup(!userData.gender || !userData.rollNumber);
             setError(null);
         } catch (err: any) {
             console.error('Fetch user error:', err.message);
@@ -79,7 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, error, refreshUser: fetchUser, logout }}>
+        <AuthContext.Provider value={{ user, loading, error, refreshUser: fetchUser, logout, needsSetup }}>
             {showSessionExpired && (
                 <SessionExpiredModal 
                   onClose={() => setShowSessionExpired(false)} 

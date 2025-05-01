@@ -19,7 +19,7 @@ type LoginData = {
 
 export function LoginForm() {
   const router = useRouter();
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, needsSetup } = useAuth();
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -65,10 +65,15 @@ export function LoginForm() {
       if (user.role === 'admin') {
         router.push('/admin/dashboard');
       } else {
-        router.push('/dashboard');
+        if (needsSetup) {
+          router.push('/userSetup');
+        } else {
+          router.push('/dashboard'); 
+        }
       }
     }
   }, [user, router]);
+  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

@@ -4,7 +4,7 @@
 import { Heading } from '@/components/dashboard/heading';
 import { useEffect, useState } from 'react'
 import AddRoomForm from './AddRoomForm'
-// import RoomList from './RoomList'
+import RoomList from './RoomList'
 
 export default function Reservations() {
   const [activeTab, setActiveTab] = useState<'occupants' | 'form'>('occupants');
@@ -17,9 +17,9 @@ export default function Reservations() {
   return (
     <>
       <div className="gap-4 mb-6">
-        <main className="max-sm:w-full sm:flex-1">
+        <main className="max-sm:w-full sm:flex-1 flex justify-between">
           <Heading>Hostel & Room Management</Heading>
-          <div className='flex items-end mb-8'>
+          <div className='flex justify-around gap-4 items-end mb-8'>
             <button
               onClick={() => setActiveTab('occupants')}
               className={`px-4 py-2 rounded-md font-medium transition text-sm ${
@@ -42,18 +42,16 @@ export default function Reservations() {
             </button>
           </div>
         </main>
-        
+
         <div className="max-w-6xl mx-auto py-10 px-4">
           <div className="flex flex-wrap gap-2 mb-6">
             {activeTab === 'occupants' && (
-              <div className="p-4 border rounded-lg shadow-md">
-                {/* <RoomList /> */}
-                <h2 className="text-xl font-semibold">Occupants List</h2>
-                {/* Add your occupants list component here */}
+              <div className="w-full">
+                <RoomList />
               </div>
             )}
             {activeTab === 'form' && (
-              <div className="p-4 border rounded-lg shadow-md">
+              <div className="p-4 border rounded-lg shadow-md w-full mx-auto h-full">
                 <AddRoomForm />
               </div>
             )}

@@ -53,11 +53,16 @@ export function ApplicationLayout({
 
   const navLinks = [
     { href: "/admin/dashboard/", icon: HomeIcon, label: "Home" },
-    { href: "/admin/dashboard/hostel", icon: TicketIcon, label: "Current Occupants" },
+    { href: "/admin/dashboard/hostel", icon: TicketIcon, label: "Room & Hostel List" },
     { href: "/admin/dashboard/maintenance", icon: Square2StackIcon, label: "Maintenance / Maintenance Log" },
   ];
 
-  const isActive = (href: string) => pathname.startsWith(href);
+  const isActive = (href: string) => {
+    const cleanPath = pathname.replace(/\/+$/, '');
+    const cleanHref = href.replace(/\/+$/, '');
+    return cleanPath === cleanHref;
+  };
+   
 
   return (
     <div className="min-h-screen bg-gray-50">
