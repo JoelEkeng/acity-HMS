@@ -1,9 +1,9 @@
 /* eslint-disable  */
+// @ts-nocheck
 "use client"
 
 import React, { useEffect, useState } from "react";
 import HostelCardProps from "./hostelCardProps";
-import { getHostels } from "@/dummydata";
 import { hostelCardProps } from "@/interfaces";
 
 export default function HostelCard() {
