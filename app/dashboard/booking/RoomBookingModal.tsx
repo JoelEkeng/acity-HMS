@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 // @ts-nocheck
 'use client'
 
@@ -9,16 +8,37 @@ import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-export default function RoomBookingModal({ isOpen, onClose, room }) {
+export default function RoomBookingModal({ isOpen, onClose, room, bedPosition }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState('online')
+
+  if (!room) return null
+
+  const price = room.roomFacilities === 'AC' ? 5000 : 3500
+  const currentDate = new Date()
+  const endDate = new Date()
+  endDate.setDate(currentDate.getDate() + 30)
 
   const handleConfirmBooking = async () => {
     setIsSubmitting(true)
     try {
       const token = Cookies.get('authToken')
+
       await axios.post(
         'https://acityhost-backend.onrender.com/api/bookings',
-        { roomId: room._id },
+        {
+          roomId: room._id,
+          bedPosition: room.roomType === 'Double' ? bedPosition : undefined,
+          bookingDate: currentDate,
+          startTime: currentDate,
+          endTime: endDate,
+          payment: {
+            amount: price,
+            method: paymentMethod,
+            transactionId: paymentMethod === 'online' ? `TXN-${Date.now()}` : undefined,
+            paid: true,
+          }
+        },
         {
           withCredentials: true,
           headers: {
@@ -26,6 +46,7 @@ export default function RoomBookingModal({ isOpen, onClose, room }) {
           },
         }
       )
+
       toast.success('Room booked successfully!')
       onClose()
     } catch (err) {
@@ -35,8 +56,6 @@ export default function RoomBookingModal({ isOpen, onClose, room }) {
       setIsSubmitting(false)
     }
   }
-
-  if (!room) return null
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -68,12 +87,29 @@ export default function RoomBookingModal({ isOpen, onClose, room }) {
                 <Dialog.Title as="h3" className="text-lg font-bold text-gray-800 dark:text-white">
                   Confirm Booking
                 </Dialog.Title>
+
                 <div className="mt-4 space-y-2 text-sm text-gray-600 dark:text-zinc-300">
                   <p><strong>Room:</strong> {room.roomId}</p>
                   <p><strong>Type:</strong> {room.roomType}</p>
                   <p><strong>Facilities:</strong> {room.roomFacilities}</p>
                   <p><strong>Floor:</strong> {room.floor}</p>
                   <p><strong>Wing:</strong> {room.wing}</p>
+                  {room.roomType === 'Double' && (
+                    <p><strong>Bed:</strong> {bedPosition}</p>
+                  )}
+                  <p><strong>Price:</strong> GHS {price}</p>
+                </div>
+
+                <div className="mt-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-zinc-200">Payment Method</label>
+                  <select
+                    value={paymentMethod}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-700 dark:text-white"
+                  >
+                    <option value="online">Online Payment</option>
+                    <option value="offline">Pay at Hostel</option>
+                  </select>
                 </div>
 
                 <div className="mt-6 flex justify-end gap-4">
