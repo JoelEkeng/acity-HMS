@@ -49,7 +49,8 @@ export default function RoomListing() {
 
   const fetchRooms = async () => {
     try {
-      const res = await axios.get('https://acityhost-backend.onrender.com/api/rooms')
+      const res = await axios.get('https://acityhost-backend.onrender.com/api/rooms/availability');
+      // const res = await axios.get('https://acityhost-backend.onrender.com/api/rooms')
       const filtered = res.data.filter((room: any) => {
         const isHostelMatch = room.hostel === selectedHostelId
         const isFloorMatch = room.floor === selectedFloor
@@ -85,68 +86,63 @@ export default function RoomListing() {
       <div className="w-full md:w-1/2 p-4">
         <h3 className="text-xl font-bold mb-3 text-zinc-700 dark:text-zinc-200">{wing} Wing</h3>
         {wingRooms.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-center text-zinc-400">
-            <p className="text-sm">No rooms available in this wing/floor yet.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {wingRooms.map((room) => (
-              <div key={room.roomId} className={`border rounded-xl p-2 shadow-sm bg-white text-zinc-800 ${
-                hasActiveBooking ? 'border-gray-300' : 'border-red-400'
-              }`}>
-                <div className="font-semibold text-lg flex justify-center">
-                  <p className="text-red-600">{room.floor}</p>
-                  {room.roomNumber}
-                </div>
-                <div className="text-xs text-center px-2 py-1 rounded-full bg-blue-100 text-blue-700">
-                  {room.roomType} ({room.roomFacilities})
-                </div>
+        <div className="text-center py-10">No rooms available</div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          {wingRooms.map((room) => (
+            <div key={room._id} className="border rounded-lg p-3">
+              <div className="font-bold text-center">
+                {room.floor}{room.roomNumber}
+              </div>
+              <div className="text-xs text-center mb-2">
+                {room.roomType} ({room.roomFacilities})
+              </div>
 
-                {room.roomType === 'Double' ? (
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    <button
-                      onClick={() => openBookingModal(room, 'Top')}
-                      disabled={hasActiveBooking}
-                      className={`p-2 rounded text-xs ${
-                        hasActiveBooking
-                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                          : 'bg-red-100 hover:bg-red-200'
-                      }`}
-                    >
-                      {hasActiveBooking ? 'Already Booked' : 'Top Bed'}
-                    </button>
-                    <button
-                      onClick={() => openBookingModal(room, 'Bottom')}
-                      disabled={hasActiveBooking}
-                      className={`p-2 rounded text-xs ${
-                        hasActiveBooking
-                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                          : 'bg-red-100 hover:bg-red-200'
-                      }`}
-                    >
-                      {hasActiveBooking ? 'Already Booked' : 'Bottom Bed'}
-                    </button>
-                  </div>
-                ) : (
+              {room.roomType === 'Double' ? (
+                <div className="grid grid-cols-2 gap-2">
                   <button
-                    onClick={() => openBookingModal(room, null)}
-                    disabled={hasActiveBooking}
-                    className={`mt-2 p-2 w-full rounded text-sm ${
-                      hasActiveBooking
-                        ? 'bg-gray-400 text-white cursor-not-allowed'
-                        : 'bg-red-500 hover:bg-red-600 text-white'
+                    onClick={() => openBookingModal(room, 'Top')}
+                    disabled={!room.beds.top || hasActiveBooking}
+                    className={`text-xs p-2 rounded ${
+                      !room.beds.top || hasActiveBooking
+                        ? 'bg-gray-200 cursor-not-allowed'
+                        : 'bg-blue-100 hover:bg-blue-200'
                     }`}
                   >
-                    {hasActiveBooking ? 'Already Booked' : 'Book Room'}
+                    {!room.beds.top ? 'Booked' : 'Top Bed'}
                   </button>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    )
-  }
+                  <button
+                    onClick={() => openBookingModal(room, 'Bottom')}
+                    disabled={!room.beds.bottom || hasActiveBooking}
+                    className={`text-xs p-2 rounded ${
+                      !room.beds.bottom || hasActiveBooking
+                        ? 'bg-gray-200 cursor-not-allowed'
+                        : 'bg-blue-100 hover:bg-blue-200'
+                    }`}
+                  >
+                    {!room.beds.bottom ? 'Booked' : 'Bottom Bed'}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => openBookingModal(room, null)}
+                  disabled={!room.beds.top || hasActiveBooking}
+                  className={`w-full p-2 rounded ${
+                    !room.beds.top || hasActiveBooking
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-green-500 hover:bg-green-600 text-white'
+                  }`}
+                >
+                  {!room.beds.top ? 'Booked' : 'Book Room'}
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
