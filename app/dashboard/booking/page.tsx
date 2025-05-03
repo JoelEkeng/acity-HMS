@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useAuth } from '@/context/AuthContext'
 import { toast } from 'react-hot-toast'
 import RoomBookingModal from './RoomBookingModal'
+import { Divider } from '@/components/dashboard/divider'
 
 export default function RoomListing() {
   const { user } = useAuth()
@@ -78,6 +79,12 @@ export default function RoomListing() {
     setIsModalOpen(true)
   }
 
+  const refreshRooms = () => {
+    if (selectedHostelId && selectedFloor && selectedRoomType) {
+      fetchRooms();
+    }
+  };
+
   const renderRoomGrid = (wing: string) => {
     const wingRooms = rooms.filter((r) => r.wing === wing)
 
@@ -104,19 +111,21 @@ export default function RoomListing() {
                     disabled={!room.beds.top || hasActiveBooking}
                     className={`text-xs p-2 rounded ${
                       !room.beds.top || hasActiveBooking
-                        ? 'bg-red-400 cursor-not-allowed'
-                        : 'bg-green-400 hover:bg-blue-200'
+                        ? 'bg-red-600 cursor-not-allowed'
+                        : 'bg-green-400 hover:bg-green-500'
                     }`}
                   >
                     {!room.beds.top ? 'Booked' : 'Top Bed'}
+                    <Divider />
                   </button>
+                    
                   <button
                     onClick={() => openBookingModal(room, 'Bottom')}
                     disabled={!room.beds.bottom || hasActiveBooking}
                     className={`text-xs p-2 rounded ${
                       !room.beds.bottom || hasActiveBooking
-                        ? 'bg-red-400 cursor-not-allowed'
-                        : 'bg-green-400 hover:bg-blue-200'
+                        ? 'bg-red-600 cursor-not-allowed'
+                        : 'bg-green-400 hover:bg-green-500'
                     }`}
                   >
                     {!room.beds.bottom ? 'Booked' : 'Bottom Bed'}
@@ -157,8 +166,11 @@ export default function RoomListing() {
         onClose={() => setIsModalOpen(false)}
         room={selectedRoom}
         bedPosition={selectedBed}
+        onBookingSuccess={refreshRooms}
       />
 
+      {!hasActiveBooking && (
+      <div className="mb-4 p-4 bg-slate-50 border-l-4 border-red-500 ">
       <div className="mb-8 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-red-600">🏠 Book a Room</h1>
         <p className="text-zinc-500 mt-2">
@@ -173,7 +185,7 @@ export default function RoomListing() {
           onChange={(e) => setSelectedHostelId(e.target.value)}
           className="p-3 border rounded-md bg-white text-zinc-700 shadow-sm"
         >
-          <option value="">🏢 Select Hostel</option>
+          <option value="">Select Hostel</option>
           {hostels.map((h) => (
             <option key={h._id} value={h.id}>
               {h.name}
@@ -186,7 +198,7 @@ export default function RoomListing() {
           onChange={(e) => setSelectedFloor(e.target.value)}
           className="p-3 border rounded-md bg-white text-zinc-700 shadow-sm"
         >
-          <option value="">🏬 Select Floor</option>
+          <option value="">Select Floor</option>
           {allowedFloors.map((f) => (
             <option key={f} value={f}>
               Floor {f}
@@ -211,6 +223,8 @@ export default function RoomListing() {
         {allowedWings.includes('Left') && renderRoomGrid('Left')}
         {allowedWings.includes('Right') && renderRoomGrid('Right')}
       </div>
+    </div>
+      )}
     </div>
   )
 }

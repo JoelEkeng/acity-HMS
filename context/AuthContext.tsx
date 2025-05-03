@@ -92,8 +92,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = () => {
         Cookies.remove('authToken');
-        setUser(null);
         router.push('/login');
+        setUser(null);
     };
 
     useEffect(() => {

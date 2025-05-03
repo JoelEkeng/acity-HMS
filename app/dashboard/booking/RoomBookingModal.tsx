@@ -9,7 +9,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useAuth } from '@/context/AuthContext'
 
-export default function RoomBookingModal({ isOpen, onClose, room, bedPosition }) {
+export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, onBookingSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('online')
   const { user } = useAuth();
@@ -64,6 +64,7 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition })
         }
       });
       onClose();
+      onBookingSuccess();
     } catch (err) {
       console.error('Booking failed:', err?.response?.data || err.message);
       toast.error('Failed to book room');
@@ -123,8 +124,8 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition })
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-700 dark:text-white"
                   >
-                    <option value="online">Bank Transfer</option>
-                    <option value="offline">Mobile Money</option>
+                    <option value="online">Mobile Money</option>
+                    <option value="offline">Bank Transfer</option>
                   </select>
                 </div>
 

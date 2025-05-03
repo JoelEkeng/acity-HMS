@@ -56,10 +56,6 @@ function AccountDropdownMenu({ anchor }) {
         <DropdownLabel>My Account</DropdownLabel>
       </DropdownItem>
       <DropdownDivider />
-      <DropdownItem onClick={logout}>
-        <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
-        <DropdownLabel>Sign Out</DropdownLabel>
-      </DropdownItem>
       <DropdownItem className="flex">
           <button
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
@@ -68,6 +64,10 @@ function AccountDropdownMenu({ anchor }) {
             {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
           </button>
           <DropdownLabel>Theme</DropdownLabel>
+      </DropdownItem>
+      <DropdownItem onClick={logout}>
+        <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
+        <DropdownLabel>Sign Out</DropdownLabel>
       </DropdownItem>
     </DropdownMenu>
   );

@@ -38,19 +38,19 @@ export function MaintenanceForm() {
   const [submitting, setSubmitting] = useState(false)
   const [successMsg, setSuccessMsg] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
+  const { user, refreshUser } = useAuth(); 
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       category: "",
-      roomNumber: "",
+      roomNumber: user?.roomNumber,
       title: "",
       description: "",
-      studentId: "10211100294"
+      studentId: user?.rollNumber
     },
   })
 
-  const { refreshUser } = useAuth(); 
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setSubmitting(true)
@@ -162,7 +162,7 @@ export function MaintenanceForm() {
             <FormItem>
               <FormLabel>Room Number</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. B202" {...field} />
+                <Input placeholder="e.g. B202" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -178,6 +178,21 @@ export function MaintenanceForm() {
               <FormLabel>Issue Title</FormLabel>
               <FormControl>
                 <Input placeholder="e.g. Fan not working" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+          {/* Student ID */}
+          <FormField
+          control={form.control}
+          name="studentId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Student ID</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your student ID" {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -200,20 +215,7 @@ export function MaintenanceForm() {
         />
 
         
-        {/* Student ID */}
-        <FormField
-          control={form.control}
-          name="studentId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Student ID</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter your student ID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      
 
         {/* FILE UPLOAD */}
         <div>
