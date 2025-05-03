@@ -40,11 +40,16 @@ export function MaintenanceForm() {
   const [errorMsg, setErrorMsg] = useState("")
   const { user, refreshUser } = useAuth(); 
 
+  const roomNumber = user?.currentBooking?.roomId?.roomNumber
+  const floor = user?.currentBooking?.roomId?.floor
+
+  const floorRoomNumber = `${floor}-${roomNumber}`
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       category: "",
-      roomNumber: user?.roomNumber,
+      roomNumber: floorRoomNumber,
       title: "",
       description: "",
       studentId: user?.rollNumber
