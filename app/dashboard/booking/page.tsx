@@ -72,7 +72,7 @@ export default function RoomListing() {
   }
 
   const openBookingModal = (room: any, bed: any) => {
-    if (hasActiveBooking) return; // Prevent opening modal if already booked
+    if (hasActiveBooking) return; 
     setSelectedRoom(room)
     setSelectedBed(bed)
     setIsModalOpen(true)
@@ -83,7 +83,7 @@ export default function RoomListing() {
 
     return (
       <div className="w-full md:w-1/2 p-4">
-        <h3 className="text-xl font-bold mb-3 text-zinc-700 dark:text-zinc-200">{wing} Wing</h3>
+        <h3 className="text-xl text-center font-bold mb-3 text-zinc-700 dark:text-zinc-200">{wing} Wing</h3>
         {wingRooms.length === 0 ? (
         <div className="text-center py-10">No rooms available</div>
       ) : (
@@ -104,8 +104,8 @@ export default function RoomListing() {
                     disabled={!room.beds.top || hasActiveBooking}
                     className={`text-xs p-2 rounded ${
                       !room.beds.top || hasActiveBooking
-                        ? 'bg-gray-200 cursor-not-allowed'
-                        : 'bg-blue-100 hover:bg-blue-200'
+                        ? 'bg-red-400 cursor-not-allowed'
+                        : 'bg-green-400 hover:bg-blue-200'
                     }`}
                   >
                     {!room.beds.top ? 'Booked' : 'Top Bed'}
@@ -115,8 +115,8 @@ export default function RoomListing() {
                     disabled={!room.beds.bottom || hasActiveBooking}
                     className={`text-xs p-2 rounded ${
                       !room.beds.bottom || hasActiveBooking
-                        ? 'bg-gray-200 cursor-not-allowed'
-                        : 'bg-blue-100 hover:bg-blue-200'
+                        ? 'bg-red-400 cursor-not-allowed'
+                        : 'bg-green-400 hover:bg-blue-200'
                     }`}
                   >
                     {!room.beds.bottom ? 'Booked' : 'Bottom Bed'}
@@ -132,7 +132,7 @@ export default function RoomListing() {
                       : 'bg-green-500 hover:bg-green-600 text-white'
                   }`}
                 >
-                  {!room.beds.top ? 'Booked' : 'Book Room'}
+                  {!room.beds.top ? 'Booked' : 'Available'}
                 </button>
               )}
             </div>
