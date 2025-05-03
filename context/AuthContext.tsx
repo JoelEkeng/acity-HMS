@@ -7,6 +7,13 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { SessionExpiredModal } from "@/components/modals/SessionExpiredModal"; 
 
+interface Booking {
+    id: string;
+    roomId: any;
+    startTime: Date;
+    endTime: Date;
+    status: string;
+  }
 interface User {
     id: string,
     studentId: string,
@@ -24,6 +31,7 @@ interface User {
     healthConditions?: string,
     allergies?: string,
     emergencyContact?: string,
+    currentBooking?: Booking | null;
 }
 
 interface AuthContextType {
@@ -33,6 +41,7 @@ interface AuthContextType {
     refreshUser: () => void;
     logout: () => void;
     needsSetup: boolean;
+    hasActiveBooking: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,6 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [error, setError] = useState<string | null>(null);
     const [showSessionExpired, setShowSessionExpired] = useState(false);
     const [needsSetup, setNeedsSetup] = useState(false);
+    const [hasActiveBooking, setHasActiveBooking] = useState(false);
     const router = useRouter();
 
     const fetchUser = async () => {
@@ -63,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const userData = response.data;
             setUser(userData);
             setNeedsSetup(!userData.gender || !userData.rollNumber);
+            setHasActiveBooking(!!userData.currentBooking);
             setError(null);
         } catch (err: any) {
             console.error('Fetch user error:', err.message);
@@ -90,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, error, refreshUser: fetchUser, logout, needsSetup }}>
+        <AuthContext.Provider value={{ user, loading, error, refreshUser: fetchUser, logout, needsSetup, hasActiveBooking }}>
             {showSessionExpired && (
                 <SessionExpiredModal 
                   onClose={() => setShowSessionExpired(false)} 

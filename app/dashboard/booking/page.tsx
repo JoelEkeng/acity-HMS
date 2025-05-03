@@ -19,6 +19,8 @@ export default function RoomListing() {
   const [selectedRoom, setSelectedRoom] = useState(null)
   const [selectedBed, setSelectedBed] = useState(null)
 
+  const hasActiveBooking = !!user?.currentBooking;
+
   const gender = user?.gender
   const allowedFloors = gender === 'male' ? ['A', 'C', 'D'] : ['B', 'C']
   const allowedWings =
@@ -70,6 +72,7 @@ export default function RoomListing() {
   }
 
   const openBookingModal = (room: any, bed: any) => {
+    if (hasActiveBooking) return; // Prevent opening modal if already booked
     setSelectedRoom(room)
     setSelectedBed(bed)
     setIsModalOpen(true)
@@ -88,10 +91,9 @@ export default function RoomListing() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {wingRooms.map((room) => (
-              <div
-                key={room.roomId}
-                className="border rounded-xl p-2 shadow-sm bg-white text-zinc-800 border-red-400 space-y-2"
-              >
+              <div key={room.roomId} className={`border rounded-xl p-2 shadow-sm bg-white text-zinc-800 ${
+                hasActiveBooking ? 'border-gray-300' : 'border-red-400'
+              }`}>
                 <div className="font-semibold text-lg flex justify-center">
                   <p className="text-red-600">{room.floor}</p>
                   {room.roomNumber}
@@ -104,23 +106,38 @@ export default function RoomListing() {
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     <button
                       onClick={() => openBookingModal(room, 'Top')}
-                      className="p-2 rounded bg-red-100 hover:bg-red-200 text-xs"
+                      disabled={hasActiveBooking}
+                      className={`p-2 rounded text-xs ${
+                        hasActiveBooking
+                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                          : 'bg-red-100 hover:bg-red-200'
+                      }`}
                     >
-                      Top Bed
+                      {hasActiveBooking ? 'Already Booked' : 'Top Bed'}
                     </button>
                     <button
                       onClick={() => openBookingModal(room, 'Bottom')}
-                      className="p-2 rounded bg-red-100 hover:bg-red-200 text-xs"
+                      disabled={hasActiveBooking}
+                      className={`p-2 rounded text-xs ${
+                        hasActiveBooking
+                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                          : 'bg-red-100 hover:bg-red-200'
+                      }`}
                     >
-                      Bottom Bed
+                      {hasActiveBooking ? 'Already Booked' : 'Bottom Bed'}
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={() => openBookingModal(room, null)}
-                    className="mt-2 p-2 w-full rounded bg-red-500 text-white hover:bg-red-600 text-sm"
+                    disabled={hasActiveBooking}
+                    className={`mt-2 p-2 w-full rounded text-sm ${
+                      hasActiveBooking
+                        ? 'bg-gray-400 text-white cursor-not-allowed'
+                        : 'bg-red-500 hover:bg-red-600 text-white'
+                    }`}
                   >
-                    Book Room
+                    {hasActiveBooking ? 'Already Booked' : 'Book Room'}
                   </button>
                 )}
               </div>
@@ -133,6 +150,13 @@ export default function RoomListing() {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
+      {hasActiveBooking && (
+        <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+          <p className="font-bold">You already have an active booking</p>
+          <p>Please check your dashboard for booking details</p>
+        </div>
+      )}
+
       <RoomBookingModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

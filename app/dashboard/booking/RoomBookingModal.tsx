@@ -7,36 +7,43 @@ import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useAuth } from '@/context/AuthContext'
 
 export default function RoomBookingModal({ isOpen, onClose, room, bedPosition }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('online')
+  const { user } = useAuth();
 
   if (!room) return null
 
-  const price = room.roomFacilities === 'AC' ? 5000 : 3500
+  const price = room.roomFacilities === 'AC' ? 900 : 700
   const currentDate = new Date()
   const endDate = new Date()
   endDate.setDate(currentDate.getDate() + 30)
 
   const handleConfirmBooking = async () => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
-      const token = Cookies.get('authToken')
-
+      const token = Cookies.get('authToken');
+      const rollNumber = user.rollNumber;
+      if (!rollNumber) throw new Error('Missing rollNumber');
+  
+      const paymentMethodMapped = paymentMethod === 'online' ? 'Momo' : 'Bank Transfer';
+  
       await axios.post(
         'https://acityhost-backend.onrender.com/api/bookings',
         {
-          roomId: room._id,
+          rollNumber,
+          roomId: room.id,  
           bedPosition: room.roomType === 'Double' ? bedPosition : undefined,
-          bookingDate: currentDate,
-          startTime: currentDate,
-          endTime: endDate,
+          bookingDate: new Date(),
+          startTime: new Date(),
+          endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           payment: {
             amount: price,
-            method: paymentMethod,
-            transactionId: paymentMethod === 'online' ? `TXN-${Date.now()}` : undefined,
-            paid: true,
+            method: paymentMethodMapped,
+            transactionId: `TXN-${Date.now()}`,
+            paid: true
           }
         },
         {
@@ -45,17 +52,26 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition })
             Authorization: `Bearer ${token}`,
           },
         }
-      )
-
-      toast.success('Room booked successfully!')
-      onClose()
+      );
+  
+      toast.success('Room booked successfully!', {
+        duration: 4000,
+        position: 'top-center',
+        icon: '🎉',
+        style: {
+          background: '#4BB543',
+          color: '#fff',
+        }
+      });
+      onClose();
     } catch (err) {
-      console.error(err)
-      toast.error('Failed to book room')
+      console.error('Booking failed:', err?.response?.data || err.message);
+      toast.error('Failed to book room');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
+
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -89,7 +105,7 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition })
                 </Dialog.Title>
 
                 <div className="mt-4 space-y-2 text-sm text-gray-600 dark:text-zinc-300">
-                  <p><strong>Room:</strong> {room.roomId}</p>
+                  <p><strong>Room ID:</strong> {room.roomId}</p>
                   <p><strong>Type:</strong> {room.roomType}</p>
                   <p><strong>Facilities:</strong> {room.roomFacilities}</p>
                   <p><strong>Floor:</strong> {room.floor}</p>
@@ -97,7 +113,7 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition })
                   {room.roomType === 'Double' && (
                     <p><strong>Bed:</strong> {bedPosition}</p>
                   )}
-                  <p><strong>Price:</strong> GHS {price}</p>
+                  <p><strong>Price:</strong> $ {price}</p>
                 </div>
 
                 <div className="mt-4">
@@ -107,8 +123,8 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition })
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-700 dark:text-white"
                   >
-                    <option value="online">Online Payment</option>
-                    <option value="offline">Pay at Hostel</option>
+                    <option value="online">Bank Transfer</option>
+                    <option value="offline">Mobile Money</option>
                   </select>
                 </div>
 
