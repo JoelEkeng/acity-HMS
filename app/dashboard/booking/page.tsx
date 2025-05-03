@@ -6,7 +6,6 @@ import axios from 'axios'
 import { useAuth } from '@/context/AuthContext'
 import { toast } from 'react-hot-toast'
 import RoomBookingModal from './RoomBookingModal'
-import Cookies from "js-cookie";
 
 export default function RoomListing() {
   const { user } = useAuth()
@@ -49,17 +48,8 @@ export default function RoomListing() {
   }
 
   const fetchRooms = async () => {
-    const token = Cookies.get('authToken')
     try {
-      const res = await axios.get('https://acityhost-backend.onrender.com/api/rooms/availability', {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-      );
-      // const res = await axios.get('https://acityhost-backend.onrender.com/api/rooms')
+      const res = await axios.get('https://acityhost-backend.onrender.com/api/rooms')
       const filtered = res.data.filter((room: any) => {
         const isHostelMatch = room.hostel === selectedHostelId
         const isFloorMatch = room.floor === selectedFloor
