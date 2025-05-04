@@ -3,7 +3,8 @@ import MaintenanceList from '@/app/dashboard/maintenance/maintenanceList';
 import axios from 'axios';
 
 export const metadata: Metadata = {
-  title: 'ACityHost Properties',
+  title: 'ACityHost Maintenance',
+  description: 'Manage your maintenance tickets and requests.',
 };
 
 export default async function Maintenances() {

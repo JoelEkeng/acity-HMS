@@ -38,7 +38,7 @@ export default function MaintenanceList({ properties }: { properties: Maintenanc
           <Divider soft className="mt-2 mb-4" />
         </div>
 
-        <div className="flex flex-wrap gap-2 sm:items-end">
+        {/* <div className="flex flex-wrap gap-2 sm:items-end">
           <InputGroup>
             <Input name="search" placeholder="Search" />
           </InputGroup>
@@ -47,7 +47,7 @@ export default function MaintenanceList({ properties }: { properties: Maintenanc
             <option value="date">Sort by date</option>
             <option value="status">Sort by status</option>
           </Select>
-        </div>
+        </div> */}
       </div>
 
       {/* Responsive Tabs */}
