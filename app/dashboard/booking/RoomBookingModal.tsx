@@ -33,7 +33,7 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, o
       await axios.post(
         'https://acityhost-backend.onrender.com/api/bookings',
         {
-          rollNumber,
+          rollNumber: user.rollNumber,
           roomId: room.id,  
           bedPosition: room.roomType === 'Double' ? bedPosition : undefined,
           bookingDate: new Date(),
