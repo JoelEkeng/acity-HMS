@@ -9,6 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 export default function UserSetupPage() {
   const { user, refreshUser } = useAuth();
@@ -27,12 +28,15 @@ export default function UserSetupPage() {
   }, [user]);
 
   const onSubmit = async (data: any) => {
+    const token = Cookies.get('authToken');
     try {
       const response = await axios.patch(
         'https://acityhost-backend.onrender.com/api/user/profile',
         data,
-        { withCredentials: true }
-      );
+        { withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`, }
+    });
       toast.success('Profile updated');
       refreshUser();
       router.push('/dashboard');
