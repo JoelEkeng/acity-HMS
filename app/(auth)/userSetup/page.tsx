@@ -69,9 +69,9 @@ export default function UserSetupPage() {
           <label className="block mb-2 font-medium">Roll Number *</label>
           <input
             disabled={!!user?.rollNumber}
-            {...register('rollNumber', { required: 'Roll number is required' })}
-            type="text"
-            placeholder="e.g. ACU123456"
+            {...register('rollNumber', { required: 'Enter a valid Roll Number', minLength: 10, maxLength: 10 })}
+            type="number"
+            placeholder="e.g. 1021100000"
             className="w-full p-3 rounded border border-zinc-300"
           />
           {errors.rollNumber && <p className="text-red-500 text-sm">{errors.rollNumber.message}</p>}

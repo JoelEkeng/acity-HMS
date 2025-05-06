@@ -55,7 +55,7 @@ export default function Home() {
       <div className="mt-14">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">General Hostel Rules</h2>
         <ul className="list-decimal list-inside space-y-2 text-red-600 text-base md:text-lg">
-          <li>Peaching is not allowed in the Hostel</li>
+          <li>Perching is not allowed in the Hostel</li>
           <li>All guests are required to sign in before entry</li>
           <li>Guests are not allowed after 9:00 PM</li>
           <li>Keep all general spaces clean</li>
