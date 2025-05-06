@@ -12,14 +12,15 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   const router = useRouter();
 
   useEffect(() => {
-    
-    if (!loading && user === null) {
-      router.push("/login");
+    if (!loading && !isAuthenticated && user === null) {
+      router.push('/login');
     }
 
-  /*   if (!loading && !isAuthenticated) {
-      router.push('/login');
+    /* if (!loading && user === null) {
+      router.push("/login");
     } */
+
+
   }, [isAuthenticated, loading, router, user]);
 
   if (loading) {
