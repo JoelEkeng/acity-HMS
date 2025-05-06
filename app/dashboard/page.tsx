@@ -20,11 +20,13 @@ import { noSSR } from "next/dynamic";
 import { CiEdit, CiTrash} from "react-icons/ci";
 import { Stat } from "@/components/dashboard/stat";
 import { useAuth } from "@/context/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Home() {
   const { user, hasActiveBooking } = useAuth();
 
   return (
+    <ProtectedRoute>
     <div className="px-4 py-8 md:px-12 lg:px-24 max-w-screen-xl mx-auto">
       {/* Welcome Heading */}
       <div className="mb-8 text-center">
@@ -62,5 +64,6 @@ export default function Home() {
         </ul>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
