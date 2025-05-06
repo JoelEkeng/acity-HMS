@@ -17,9 +17,9 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
       router.push("/login");
     }
 
-    if (!loading && !isAuthenticated) {
+  /*   if (!loading && !isAuthenticated) {
       router.push('/login');
-    }
+    } */
   }, [isAuthenticated, loading, router, user]);
 
   if (loading) {
