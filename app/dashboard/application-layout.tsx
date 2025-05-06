@@ -51,7 +51,7 @@ function AccountDropdownMenu({ anchor }) {
   const { theme, setTheme } = useTheme();
   return (
     <DropdownMenu className="min-w-64 z-50" anchor={anchor}>
-      <DropdownItem href="#">
+      <DropdownItem href="/dashboard/settings" className="flex">
         <Avatar src="/user/avatar.png" className="size-8" />
         <DropdownLabel>My Account</DropdownLabel>
       </DropdownItem>
