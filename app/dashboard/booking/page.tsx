@@ -112,7 +112,7 @@ export default function RoomListing() {
                     className={`text-xs p-2 rounded ${
                       !room.beds.top || hasActiveBooking
                         ? 'bg-red-600 cursor-not-allowed'
-                        : 'bg-green-400 hover:bg-green-500'
+                        : 'bg-green-500 hover:bg-green-600'
                     }`}
                   >
                     {!room.beds.top ? 'Booked' : 'Top Bed'}
@@ -137,7 +137,7 @@ export default function RoomListing() {
                   disabled={!room.beds.top || hasActiveBooking}
                   className={`w-full p-2 rounded ${
                     !room.beds.top || hasActiveBooking
-                      ? 'bg-gray-400 cursor-not-allowed'
+                      ? 'bg-red-600 cursor-not-allowed'
                       : 'bg-green-500 hover:bg-green-600 text-white'
                   }`}
                 >
