@@ -12,67 +12,179 @@ import { useAuth } from '@/context/AuthContext'
 export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, onBookingSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('online')
-  const { user } = useAuth();
+  const { user } = useAuth()
+  const [isProcessing, setIsProcessing] = useState(false)
 
   if (!room) return null
 
-  const price = room.roomFacilities === 'AC' ? 900 : 700
-  const currentDate = new Date()
-  const endDate = new Date()
-  endDate.setDate(currentDate.getDate() + 30)
+  const price = room.roomFacilities === 'AC' ? 14000 : 11200
 
-  const handleConfirmBooking = async () => {
-    setIsSubmitting(true);
+  const loadPaystackScript = () => {
+    return new Promise((resolve) => {
+      if (typeof window !== 'undefined' && !window.PaystackPop) {
+        const script = document.createElement('script')
+        script.src = 'https://js.paystack.co/v1/inline.js'
+        script.onload = () => resolve(true)
+        document.body.appendChild(script)
+      } else {
+        resolve(true)
+      }
+    })
+  }
+
+  const handlePaystackPayment = async () => {
+    setIsProcessing(true);
     try {
       const token = Cookies.get('authToken');
-      const rollNumber = user.rollNumber;
-      if (!rollNumber) throw new Error('Missing rollNumber');
+      if (!user?.rollNumber || !user?.email) throw new Error('User information incomplete');
   
-      const paymentMethodMapped = paymentMethod === 'online' ? 'Momo' : 'Bank Transfer';
-  
-      await axios.post(
+      // 1. Create booking record
+      const bookingResponse = await axios.post(
         'https://acityhost-backend.onrender.com/api/bookings',
         {
           rollNumber: user.rollNumber,
-          roomId: room.id,  
+          roomId: room.id,
           bedPosition: room.roomType === 'Double' ? bedPosition : undefined,
           bookingDate: new Date(),
           startTime: new Date(),
-          endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
           payment: {
             amount: price,
-            method: paymentMethodMapped,
-            transactionId: `TXN-${Date.now()}`,
-            paid: true
+            method: 'Paystack',
+            transactionId: `PSK-${Date.now()}`,
+            paid: false
           }
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+  
+      const booking = bookingResponse.data?.data || bookingResponse.data;
+      if (!booking) throw new Error('Booking creation failed');
+  
+      // 2. Load Paystack script
+      await loadPaystackScript();
+  
+      // 3. Define verification handler
+      const handleVerification = async (reference: string) => {
+        try {
+          const verificationResponse = await axios.post(
+            'https://acityhost-backend.onrender.com/api/payments/verify',
+            {
+              reference,
+              bookingId: booking._id || booking.id,
+              amount: price,
+              email: user.email
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+  
+          if (verificationResponse.data?.success) {
+            toast.success('Booking confirmed!');
+            onClose();
+            onBookingSuccess();
+          } else {
+            throw new Error(verificationResponse.data?.message || 'Verification failed');
+          }
+        } catch (error) {
+          console.error('Verification Error Details:', {
+            error: error.response?.data || error.message,
+            config: error.config
+          });
+          toast.error('Payment verification failed. Please contact support with reference: ' + reference);
+        }
+      };
+  
+      // 4. Initialize Paystack payment
+      const paystackHandler = (window as any).PaystackPop.setup({
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_test_2aec4af5f07f0303fb6f5cfff8537bff656d5136',
+        email: user.email,
+        amount: price * 100,
+        currency: 'GHS',
+        ref: booking.payment?.transactionId || `BOOKING-${Date.now()}`,
+        metadata: {
+          bookingId: booking._id || booking.id,
+          rollNumber: user.rollNumber,
+          roomId: room.id
+        },
+        callback: (response: any) => {
+          toast.success('Payment received! Verifying...');
+          handleVerification(response.reference);
+        },
+        onClose: () => {
+          toast('Payment window closed');
+          setIsProcessing(false);
+        }
+      });
+  
+      paystackHandler.openIframe();
+  
+    } catch (error) {
+      console.error('Complete Booking Error:', {
+        error: error.response?.data || error.message,
+        config: error.config
+      });
+      toast.error(error.response?.data?.message || 'Booking process failed. Please try again.');
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBankTransferBooking = async () => {
+    setIsSubmitting(true)
+    try {
+      const token = Cookies.get('authToken')
+      if (!user?.rollNumber) throw new Error('Missing rollNumber')
+
+      const bookingData = {
+        rollNumber: user.rollNumber,
+        roomId: room.id,
+        bedPosition: room.roomType === 'Double' ? bedPosition : undefined,
+        bookingDate: new Date(),
+        startTime: new Date(),
+        endTime: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        payment: {
+          amount: price,
+          method: 'Bank Transfer',
+          transactionId: `BANK-${Date.now()}`,
+          paid: false
+        }
+      }
+
+      const response = await axios.post(
+        'https://acityhost-backend.onrender.com/api/bookings',
+        bookingData,
         {
           withCredentials: true,
           headers: {
             Authorization: `Bearer ${token}`,
-          },
+            'Content-Type': 'application/json'
+          }
         }
-      );
-  
-      toast.success('Room booked successfully!', {
-        duration: 4000,
-        position: 'top-center',
-        icon: '🎉',
-        style: {
-          background: '#4BB543',
-          color: '#fff',
-        }
-      });
-      onClose();
-      onBookingSuccess();
-    } catch (err) {
-      console.error('Booking failed:', err?.response?.data || err.message);
-      toast.error('Failed to book room');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      )
 
+      toast.success('Booking request submitted! Complete bank transfer to confirm.', {
+        duration: 5000,
+        position: 'top-center'
+      })
+      onClose()
+      onBookingSuccess()
+
+    } catch (err) {
+      console.error('Bank transfer booking failed:', err.response?.data || err.message)
+      toast.error('Failed to submit booking request')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -114,17 +226,19 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, o
                   {room.roomType === 'Double' && (
                     <p><strong>Bed:</strong> {bedPosition}</p>
                   )}
-                  <p><strong>Price:</strong> $ {price}</p>
+                  <p><strong>Price:</strong> ₵ {price}</p>
                 </div>
 
                 <div className="mt-4">
-                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-zinc-200">Payment Method</label>
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-zinc-200">
+                    Payment Method
+                  </label>
                   <select
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value)}
                     className="w-full p-2 border rounded-md bg-white dark:bg-zinc-800 text-gray-700 dark:text-white"
                   >
-                    <option value="online">Mobile Money</option>
+                    <option value="online">Mobile Money/Card</option>
                     <option value="offline">Bank Transfer</option>
                   </select>
                 </div>
@@ -138,12 +252,13 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, o
                     Cancel
                   </button>
                   <button
-                    type="button"
+                    onClick={paymentMethod === 'online' ? handlePaystackPayment : handleBankTransferBooking}
+                    disabled={isProcessing || isSubmitting}
                     className="inline-flex justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none"
-                    onClick={handleConfirmBooking}
-                    disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Booking...' : 'Confirm Booking'}
+                    {isProcessing || isSubmitting
+                      ? paymentMethod === 'online' ? 'Processing Payment...' : 'Submitting...'
+                      : paymentMethod === 'online' ? `Pay ₵${price}` : 'Request Booking'}
                   </button>
                 </div>
               </Dialog.Panel>
