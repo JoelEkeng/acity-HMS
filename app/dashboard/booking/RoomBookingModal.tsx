@@ -8,12 +8,13 @@ import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useAuth } from '@/context/AuthContext'
-
+import { useRouter } from 'next/navigation'
 export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, onBookingSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('online')
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
   const [isProcessing, setIsProcessing] = useState(false)
+  const router = useRouter();
 
   if (!room) return null
 
@@ -90,8 +91,12 @@ export default function RoomBookingModal({ isOpen, onClose, room, bedPosition, o
   
           if (verificationResponse.data?.success) {
             toast.success('Booking confirmed!');
+            /* router.replace(router.asPath); */
             onClose();
             onBookingSuccess();
+            setTimeout(() => {
+              window.location.reload(); // Full page refresh
+            }, 1500);
           } else {
             throw new Error(verificationResponse.data?.message || 'Verification failed');
           }
